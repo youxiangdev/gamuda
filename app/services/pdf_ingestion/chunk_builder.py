@@ -3,8 +3,10 @@ from functools import lru_cache
 
 from docling_core.transforms.chunker import HybridChunker
 from docling_core.transforms.chunker.base import BaseChunk
+from docling_core.transforms.chunker.tokenizer.huggingface import HuggingFaceTokenizer
 from transformers import AutoTokenizer
 
+from app.core.config import get_settings
 from app.services.pdf_ingestion.document_context import DocumentContext
 
 ENTITY_PATTERNS = [
@@ -17,8 +19,20 @@ ENTITY_PATTERNS = [
 
 @lru_cache(maxsize=1)
 def get_hybrid_chunker() -> HybridChunker:
-    tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
+    model_id = _resolve_hf_tokenizer_model_id(get_settings().jina_embedding_model)
+    hf_tokenizer = AutoTokenizer.from_pretrained(model_id)
+    tokenizer = HuggingFaceTokenizer(
+        tokenizer=hf_tokenizer,
+        max_tokens=int(getattr(hf_tokenizer, "model_max_length", 0) or 0),
+    )
     return HybridChunker(tokenizer=tokenizer, max_tokens=300)
+
+
+def _resolve_hf_tokenizer_model_id(model_id: str) -> str:
+    normalized = model_id.strip()
+    if "/" in normalized:
+        return normalized
+    return f"jinaai/{normalized}"
 
 
 class ChunkRecordBuilder:
