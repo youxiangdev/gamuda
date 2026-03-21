@@ -1,5 +1,6 @@
 import json
 import re
+import csv
 from pathlib import Path
 
 import pandas as pd
@@ -16,7 +17,7 @@ class CsvLoader:
         artifact_dir = self.storage_service.ensure_artifact_dir(document_id)
 
         if path.suffix.lower() == ".csv":
-            dataframe = pd.read_csv(path, encoding="utf-8-sig")
+            dataframe = self._read_csv(path)
             dataset_name = self._slugify(Path(source_name or path.name).stem)
             profile = [self._write_dataset_artifacts(dataframe, dataset_name, artifact_dir)]
         else:
@@ -58,6 +59,68 @@ class CsvLoader:
             "parquet_path": str(parquet_path),
         }
 
+    def _read_csv(self, path: Path) -> pd.DataFrame:
+        try:
+            return pd.read_csv(path, encoding="utf-8-sig")
+        except pd.errors.ParserError:
+            return self._read_csv_with_row_repair(path)
+
+    def _read_csv_with_row_repair(self, path: Path) -> pd.DataFrame:
+        with path.open("r", encoding="utf-8-sig", newline="") as handle:
+            reader = csv.reader(handle)
+            rows = list(reader)
+
+        if not rows:
+            return pd.DataFrame()
+
+        header = rows[0]
+        expected_columns = len(header)
+        repaired_rows: list[list[str | None]] = []
+        date_like_indexes = [
+            index
+            for index, column in enumerate(header)
+            if any(token in column.lower() for token in ("date", "updated", "month", "period"))
+        ]
+
+        for row in rows[1:]:
+            if len(row) == expected_columns:
+                repaired_rows.append(row)
+                continue
+
+            if len(row) < expected_columns:
+                repaired_rows.append(row + [None] * (expected_columns - len(row)))
+                continue
+
+            overflow = len(row) - expected_columns
+            repaired = self._repair_overflow_row(row, expected_columns, overflow, date_like_indexes)
+            repaired_rows.append(repaired)
+
+        return pd.DataFrame(repaired_rows, columns=header)
+
+    def _repair_overflow_row(
+        self,
+        row: list[str],
+        expected_columns: int,
+        overflow: int,
+        date_like_indexes: list[int],
+    ) -> list[str]:
+        for index in date_like_indexes:
+            if index + overflow >= len(row):
+                continue
+
+            merged_value = ", ".join(part.strip() for part in row[index : index + overflow + 1] if part is not None)
+            candidate = row[:index] + [merged_value] + row[index + overflow + 1 :]
+            if len(candidate) == expected_columns and self._looks_like_date(merged_value):
+                return candidate
+
+        tail_index = expected_columns - 1
+        merged_tail = ", ".join(part.strip() for part in row[tail_index:] if part is not None)
+        candidate = row[:tail_index] + [merged_tail]
+        if len(candidate) == expected_columns:
+            return candidate
+
+        return row[: expected_columns - 1] + [", ".join(part.strip() for part in row[expected_columns - 1 :])]
+
     def _normalize_date_columns(self, dataframe: pd.DataFrame) -> pd.DataFrame:
         date_like_tokens = ("date", "updated", "month", "period")
         for column in dataframe.columns:
@@ -74,6 +137,10 @@ class CsvLoader:
             if valid_ratio >= 0.6:
                 dataframe[column] = parsed.dt.strftime("%Y-%m-%d").astype("string")
         return dataframe
+
+    def _looks_like_date(self, value: str) -> bool:
+        parsed = pd.to_datetime([value], errors="coerce", format="mixed", dayfirst=True)
+        return bool(pd.notna(parsed[0]))
 
     def _sample_rows(self, dataframe: pd.DataFrame, limit: int = 3) -> list[dict[str, object]]:
         sample = dataframe.head(limit).copy()

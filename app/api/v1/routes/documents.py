@@ -3,7 +3,12 @@ from sqlalchemy.orm import Session
 
 from app.db.session import get_db
 from app.schemas.chunk import DocumentChunkRead
-from app.schemas.document import DocumentRead, DocumentUploadResponse
+from app.schemas.document import (
+    DocumentOverviewRead,
+    DocumentRead,
+    DocumentUploadResponse,
+    TabularProfileRead,
+)
 from app.services.chunk_service import ChunkService
 from app.services.document_service import DocumentService
 from app.services.ingestion_service import IngestionService
@@ -49,6 +54,17 @@ def upload_document(
     )
 
 
+@router.get("", response_model=list[DocumentRead])
+def list_documents(db: Session = Depends(get_db)) -> list[DocumentRead]:
+    documents = DocumentService(db).list_documents()
+    return [DocumentRead.model_validate(document) for document in documents]
+
+
+@router.get("/overview", response_model=list[DocumentOverviewRead])
+def list_document_overviews(db: Session = Depends(get_db)) -> list[DocumentOverviewRead]:
+    return [DocumentOverviewRead.model_validate(item) for item in DocumentService(db).list_document_overviews()]
+
+
 @router.get("/{document_id}", response_model=DocumentRead)
 def get_document(document_id: str, db: Session = Depends(get_db)) -> DocumentRead:
     document_service = DocumentService(db)
@@ -67,3 +83,9 @@ def list_document_chunks(document_id: str, db: Session = Depends(get_db)) -> lis
 
     chunks = ChunkService(db).list_document_chunks(document_id)
     return [DocumentChunkRead.model_validate(chunk) for chunk in chunks]
+
+
+@router.get("/{document_id}/tabular-profile", response_model=TabularProfileRead)
+def get_tabular_profile(document_id: str, db: Session = Depends(get_db)) -> TabularProfileRead:
+    profile = DocumentService(db).get_tabular_profile(document_id)
+    return TabularProfileRead.model_validate(profile)

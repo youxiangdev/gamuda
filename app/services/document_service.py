@@ -1,15 +1,21 @@
 from pathlib import Path
+import json
 import re
 
 from fastapi import HTTPException, UploadFile, status
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models.document import Document
+from app.models.document_chunk import DocumentChunk
+from app.models.ingestion_job import IngestionJob
 from app.services.storage_service import StorageService
 
 ALLOWED_EXTENSIONS = {".pdf", ".csv", ".xlsx"}
 ALLOWED_DOCUMENT_TYPES = {"project_description", "progress_update"}
 REPORTING_PERIOD_PATTERN = re.compile(r"^\d{4}-(0[1-9]|1[0-2])$")
+DEFAULT_PROJECT_ID = "east-metro"
+DEFAULT_PACKAGE_ID = "v3"
 
 
 class DocumentService:
@@ -43,8 +49,8 @@ class DocumentService:
             extension=stored_file.extension,
             storage_path=stored_file.storage_path,
             file_size=stored_file.file_size,
-            project_id=project_id,
-            package_id=package_id,
+            project_id=(project_id.strip() if project_id else DEFAULT_PROJECT_ID),
+            package_id=(package_id.strip() if package_id else DEFAULT_PACKAGE_ID),
             document_type=document_type,
             reporting_period=reporting_period,
         )
@@ -55,6 +61,61 @@ class DocumentService:
 
     def get_document(self, document_id: str) -> Document | None:
         return self.db.get(Document, document_id)
+
+    def list_documents(self) -> list[Document]:
+        stmt = select(Document).order_by(Document.created_at.desc())
+        return list(self.db.scalars(stmt))
+
+    def get_tabular_profile(self, document_id: str) -> dict[str, object]:
+        document = self.get_document(document_id)
+        if document is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document not found.")
+
+        artifact_dir = self.storage_service.ensure_artifact_dir(document_id)
+        profile_path = artifact_dir / "tabular_profile.json"
+        if not profile_path.exists():
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Tabular profile not found for this document.",
+            )
+
+        return json.loads(profile_path.read_text(encoding="utf-8"))
+
+    def list_document_overviews(self) -> list[dict[str, object]]:
+        documents = self.list_documents()
+        overviews: list[dict[str, object]] = []
+
+        for document in documents:
+            latest_job = self.db.scalar(
+                select(IngestionJob)
+                .where(IngestionJob.document_id == document.id)
+                .order_by(IngestionJob.created_at.desc())
+                .limit(1)
+            )
+            chunk_count = self.db.scalar(
+                select(func.count(DocumentChunk.id)).where(DocumentChunk.document_id == document.id)
+            ) or 0
+
+            overviews.append(
+                {
+                    "id": document.id,
+                    "original_filename": document.original_filename,
+                    "extension": document.extension,
+                    "file_size": document.file_size,
+                    "document_type": document.document_type,
+                    "reporting_period": document.reporting_period,
+                    "project_id": document.project_id or DEFAULT_PROJECT_ID,
+                    "package_id": document.package_id or DEFAULT_PACKAGE_ID,
+                    "created_at": document.created_at,
+                    "updated_at": document.updated_at,
+                    "latest_ingestion_status": latest_job.status if latest_job else None,
+                    "latest_ingestion_summary": latest_job.summary if latest_job else None,
+                    "latest_ingestion_error": latest_job.error_message if latest_job else None,
+                    "chunk_count": int(chunk_count),
+                }
+            )
+
+        return overviews
 
     def _validate_document_type(self, document_type: str | None) -> str:
         if document_type is None:
