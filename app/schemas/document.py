@@ -59,5 +59,23 @@ class TabularDatasetProfileRead(BaseModel):
     parquet_path: str
 
 
+class TabularRepairSummaryRead(BaseModel):
+    rows_repaired: int
+    rows_padded: int
+    rows_merged_into_date_column: int
+    rows_merged_into_tail_column: int
+    rows_truncated_with_tail_merge: int
+
+
+class TabularRepairLogEntryRead(BaseModel):
+    row_number: int
+    issue: str
+    strategy: str
+    expected_columns: int
+    actual_columns: int
+
+
 class TabularProfileRead(BaseModel):
     datasets: list[TabularDatasetProfileRead]
+    repair_summary: TabularRepairSummaryRead | None = None
+    repair_log: list[TabularRepairLogEntryRead] = []
