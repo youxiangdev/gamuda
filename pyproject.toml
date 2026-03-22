@@ -1,0 +1,26 @@
+[project]
+name = "gamuda-take-home-backend"
+version = "0.1.0"
+description = "FastAPI backend skeleton for document upload and ingestion."
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.115.0,<1.0.0",
+  "uvicorn[standard]>=0.34.0,<1.0.0",
+  "psycopg[binary]>=3.2.0,<4.0.0",
+  "pgvector>=0.3.0,<1.0.0",
+  "sqlalchemy>=2.0.0,<3.0.0",
+  "pydantic-settings>=2.8.0,<3.0.0",
+  "python-multipart>=0.0.20,<1.0.0",
+  "httpx>=0.28.0,<1.0.0",
+  "openpyxl>=3.1.0,<4.0.0",
+  "docling>=2.81.0,<3.0.0",
+  "pandas>=2.2.0,<4.0.0",
+  "pyarrow>=18.0.0,<30.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
