@@ -1,0 +1,64 @@
+{
+  "datasets": [
+    {
+      "dataset_name": "broken",
+      "row_count": 3,
+      "column_count": 3,
+      "columns": [
+        {
+          "name": "milestone_id",
+          "dtype": "string"
+        },
+        {
+          "name": "status",
+          "dtype": "string"
+        },
+        {
+          "name": "forecast_date",
+          "dtype": "string"
+        }
+      ],
+      "sample_rows": [
+        {
+          "milestone_id": "MS-01",
+          "status": "On Track",
+          "forecast_date": "2026-01-03"
+        },
+        {
+          "milestone_id": "MS-02",
+          "status": "Delayed",
+          "forecast_date": "2026-04-22"
+        },
+        {
+          "milestone_id": "MS-03",
+          "status": null,
+          "forecast_date": null
+        }
+      ],
+      "parquet_path": "storage/artifacts/repair-smoke-test/broken.parquet"
+    }
+  ],
+  "repair_summary": {
+    "rows_repaired": 2,
+    "rows_padded": 1,
+    "rows_merged_into_date_column": 1,
+    "rows_merged_into_tail_column": 0,
+    "rows_truncated_with_tail_merge": 0
+  },
+  "repair_log": [
+    {
+      "row_number": 3,
+      "issue": "extra_columns",
+      "strategy": "rows_merged_into_date_column",
+      "expected_columns": 3,
+      "actual_columns": 4
+    },
+    {
+      "row_number": 4,
+      "issue": "missing_columns",
+      "strategy": "pad_missing_columns",
+      "expected_columns": 3,
+      "actual_columns": 1
+    }
+  ]
+}

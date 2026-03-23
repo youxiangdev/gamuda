@@ -1,0 +1,19 @@
+{
+  "source_name": "risk_register_mar_2026.csv",
+  "repair_summary": {
+    "rows_repaired": 1,
+    "rows_padded": 0,
+    "rows_merged_into_date_column": 1,
+    "rows_merged_into_tail_column": 0,
+    "rows_truncated_with_tail_merge": 0
+  },
+  "repair_log": [
+    {
+      "row_number": 4,
+      "issue": "extra_columns",
+      "strategy": "rows_merged_into_date_column",
+      "expected_columns": 18,
+      "actual_columns": 19
+    }
+  ]
+}

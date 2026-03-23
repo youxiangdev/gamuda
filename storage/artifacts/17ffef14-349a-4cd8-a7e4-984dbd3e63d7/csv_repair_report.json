@@ -1,0 +1,11 @@
+{
+  "source_name": "financial_summary_mar_2026.csv",
+  "repair_summary": {
+    "rows_repaired": 0,
+    "rows_padded": 0,
+    "rows_merged_into_date_column": 0,
+    "rows_merged_into_tail_column": 0,
+    "rows_truncated_with_tail_merge": 0
+  },
+  "repair_log": []
+}
