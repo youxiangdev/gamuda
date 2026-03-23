@@ -27,6 +27,7 @@ RUN uv pip compile pyproject.toml --python-version 3.12 --torch-backend cpu \
     && uv venv /app/.venv \
     && uv pip install --python /app/.venv/bin/python --no-cache --torch-backend cpu -r requirements.lock.txt \
     && uv pip install --python /app/.venv/bin/python --no-cache --no-deps . \
+    && /app/.venv/bin/python -c "from langchain_core.messages import AIMessage; from app.main import app; print(AIMessage.__name__, app.title)" \
     && rm -rf /root/.cache /app/.cache requirements.lock.txt
 
 EXPOSE 8000
