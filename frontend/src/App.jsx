@@ -1,6 +1,15 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+const DEFAULT_ROUTE = "docs";
+
+const getRouteFromPath = (pathname) => {
+  if (pathname === "/chat") return "chat";
+  if (pathname === "/docs" || pathname === "/") return "docs";
+  return DEFAULT_ROUTE;
+};
+
+const getPathFromRoute = (route) => (route === "chat" ? "/chat" : "/docs");
 
 const formatDate = (value) =>
   new Date(value).toLocaleString("en-MY", {
@@ -21,6 +30,355 @@ const formatFileSize = (bytes) => {
     index += 1;
   }
   return `${size.toFixed(size >= 10 || index === 0 ? 0 : 1)} ${units[index]}`;
+};
+
+const formatEventLabel = (eventType) =>
+  eventType
+    .split("_")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+
+const INLINE_MARKDOWN_PATTERN =
+  /(`([^`]+)`)|(\[([^\]]+)\]\((https?:\/\/[^\s)]+)\))|(\*\*([^*]+)\*\*)|(\*([^*]+)\*)/g;
+
+const renderInlineMarkdown = (text, keyPrefix) => {
+  const nodes = [];
+  let lastIndex = 0;
+  let match;
+
+  INLINE_MARKDOWN_PATTERN.lastIndex = 0;
+
+  while ((match = INLINE_MARKDOWN_PATTERN.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      nodes.push(text.slice(lastIndex, match.index));
+    }
+
+    const nodeKey = `${keyPrefix}-${match.index}`;
+
+    if (match[2]) {
+      nodes.push(
+        <code key={nodeKey} className="markdown-inline-code">
+          {match[2]}
+        </code>
+      );
+    } else if (match[4] && match[5]) {
+      nodes.push(
+        <a
+          key={nodeKey}
+          className="markdown-link"
+          href={match[5]}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {match[4]}
+        </a>
+      );
+    } else if (match[7]) {
+      nodes.push(
+        <strong key={nodeKey} className="markdown-strong">
+          {renderInlineMarkdown(match[7], `${nodeKey}-strong`)}
+        </strong>
+      );
+    } else if (match[9]) {
+      nodes.push(
+        <em key={nodeKey} className="markdown-emphasis">
+          {renderInlineMarkdown(match[9], `${nodeKey}-emphasis`)}
+        </em>
+      );
+    }
+
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    nodes.push(text.slice(lastIndex));
+  }
+
+  return nodes;
+};
+
+const renderInlineMarkdownWithBreaks = (text, keyPrefix) =>
+  text.split("\n").flatMap((line, index, lines) => {
+    const lineKey = `${keyPrefix}-line-${index}`;
+    const content = renderInlineMarkdown(line, lineKey);
+
+    if (index === lines.length - 1) {
+      return content;
+    }
+
+    return [
+      <Fragment key={lineKey}>
+        {content}
+        <br />
+      </Fragment>,
+    ];
+  });
+
+const parseMarkdownBlocks = (content) => {
+  const lines = content.split("\n");
+  const blocks = [];
+  let index = 0;
+
+  while (index < lines.length) {
+    const line = lines[index];
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      index += 1;
+      continue;
+    }
+
+    if (trimmed.startsWith("```")) {
+      const language = trimmed.slice(3).trim();
+      const codeLines = [];
+      index += 1;
+
+      while (index < lines.length && !lines[index].trim().startsWith("```")) {
+        codeLines.push(lines[index]);
+        index += 1;
+      }
+
+      if (index < lines.length) {
+        index += 1;
+      }
+
+      blocks.push({ type: "code", language, content: codeLines.join("\n") });
+      continue;
+    }
+
+    const headingMatch = trimmed.match(/^(#{1,6})\s+(.*)$/);
+    if (headingMatch) {
+      blocks.push({
+        type: "heading",
+        level: headingMatch[1].length,
+        content: headingMatch[2],
+      });
+      index += 1;
+      continue;
+    }
+
+    if (/^[-*+]\s+/.test(trimmed)) {
+      const items = [];
+
+      while (index < lines.length && /^[-*+]\s+/.test(lines[index].trim())) {
+        items.push(lines[index].trim().replace(/^[-*+]\s+/, ""));
+        index += 1;
+      }
+
+      blocks.push({ type: "unordered-list", items });
+      continue;
+    }
+
+    if (/^\d+\.\s+/.test(trimmed)) {
+      const items = [];
+
+      while (index < lines.length && /^\d+\.\s+/.test(lines[index].trim())) {
+        items.push(lines[index].trim().replace(/^\d+\.\s+/, ""));
+        index += 1;
+      }
+
+      blocks.push({ type: "ordered-list", items });
+      continue;
+    }
+
+    if (/^>\s?/.test(trimmed)) {
+      const quoteLines = [];
+
+      while (index < lines.length && /^>\s?/.test(lines[index].trim())) {
+        quoteLines.push(lines[index].trim().replace(/^>\s?/, ""));
+        index += 1;
+      }
+
+      blocks.push({ type: "blockquote", content: quoteLines.join("\n") });
+      continue;
+    }
+
+    const paragraphLines = [];
+
+    while (index < lines.length) {
+      const current = lines[index];
+      const currentTrimmed = current.trim();
+
+      if (
+        !currentTrimmed ||
+        currentTrimmed.startsWith("```") ||
+        /^(#{1,6})\s+/.test(currentTrimmed) ||
+        /^[-*+]\s+/.test(currentTrimmed) ||
+        /^\d+\.\s+/.test(currentTrimmed) ||
+        /^>\s?/.test(currentTrimmed)
+      ) {
+        break;
+      }
+
+      paragraphLines.push(current);
+      index += 1;
+    }
+
+    blocks.push({ type: "paragraph", content: paragraphLines.join("\n") });
+  }
+
+  return blocks;
+};
+
+function MarkdownPreview({ content }) {
+  const blocks = parseMarkdownBlocks(content);
+
+  return (
+    <div className="markdown-preview">
+      {blocks.map((block, index) => {
+        const blockKey = `markdown-block-${index}`;
+
+        if (block.type === "heading") {
+          const HeadingTag = `h${block.level}`;
+          return (
+            <HeadingTag key={blockKey} className="markdown-heading">
+              {renderInlineMarkdown(block.content, `${blockKey}-heading`)}
+            </HeadingTag>
+          );
+        }
+
+        if (block.type === "code") {
+          return (
+            <pre key={blockKey} className="markdown-code-block">
+              <code>{block.content}</code>
+            </pre>
+          );
+        }
+
+        if (block.type === "unordered-list") {
+          return (
+            <ul key={blockKey} className="markdown-list">
+              {block.items.map((item, itemIndex) => (
+                <li key={`${blockKey}-item-${itemIndex}`}>
+                  {renderInlineMarkdownWithBreaks(item, `${blockKey}-item-${itemIndex}`)}
+                </li>
+              ))}
+            </ul>
+          );
+        }
+
+        if (block.type === "ordered-list") {
+          return (
+            <ol key={blockKey} className="markdown-list markdown-list-ordered">
+              {block.items.map((item, itemIndex) => (
+                <li key={`${blockKey}-item-${itemIndex}`}>
+                  {renderInlineMarkdownWithBreaks(item, `${blockKey}-item-${itemIndex}`)}
+                </li>
+              ))}
+            </ol>
+          );
+        }
+
+        if (block.type === "blockquote") {
+          return (
+            <blockquote key={blockKey} className="markdown-blockquote">
+              {renderInlineMarkdownWithBreaks(block.content, `${blockKey}-quote`)}
+            </blockquote>
+          );
+        }
+
+        return (
+          <p key={blockKey} className="markdown-paragraph">
+            {renderInlineMarkdownWithBreaks(block.content, `${blockKey}-paragraph`)}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
+const EVENT_CONTENT = {
+  run_started: {
+    title: "Run started",
+    description: "Your question was received and a new analysis run was created.",
+  },
+  route_selected: {
+    title: "Route selected",
+    description: "The router chose the best evidence path for this question.",
+  },
+  document_agent_started: {
+    title: "Checking documents",
+    description: "Searching the embedded project reports and briefs for relevant evidence.",
+  },
+  document_findings: {
+    title: "Document evidence ready",
+    description: "The document retriever returned cited report and brief evidence.",
+  },
+  data_agent_started: {
+    title: "Checking datasets",
+    description: "Inspecting structured datasets and preparing bounded analysis queries.",
+  },
+  data_findings: {
+    title: "Data evidence ready",
+    description: "The data analyst returned cited evidence from the structured artifacts.",
+  },
+  direct_response_started: {
+    title: "Answering directly",
+    description: "Using the current conversation context without starting retrieval or data analysis.",
+  },
+  clarify_started: {
+    title: "Asking for clarification",
+    description: "The request needs one more detail before a grounded answer can continue.",
+  },
+  reporter_started: {
+    title: "Drafting response",
+    description: "Synthesizing all findings into a grounded answer.",
+  },
+  answer_streaming: {
+    title: "Streaming answer",
+    description: "The assistant is now sending the final response.",
+  },
+  completed: {
+    title: "Answer ready",
+    description: "The run completed and the response is ready to read.",
+  },
+  error: {
+    title: "Run failed",
+    description: "Something interrupted the run before the answer was completed.",
+  },
+};
+
+const getTimelineEntries = (events) => {
+  const entries = [];
+  let sawAnswerStream = false;
+
+  events.forEach((entry) => {
+    if (entry.type === "answer_chunk") {
+      if (!sawAnswerStream) {
+        entries.push({
+          id: "answer-streaming",
+          type: "answer_streaming",
+          payload: entry.payload,
+        });
+        sawAnswerStream = true;
+      }
+      return;
+    }
+
+    entries.push(entry);
+  });
+
+  return entries;
+};
+
+const getCurrentStep = (timelineEntries, status) => {
+  if (!timelineEntries.length) {
+    return {
+      title: "Waiting to start",
+      description: "Submit a question to begin a new run.",
+    };
+  }
+
+  if (status === "failed") {
+    return EVENT_CONTENT.error;
+  }
+
+  if (status === "completed") {
+    return EVENT_CONTENT.completed;
+  }
+
+  const latest = timelineEntries[timelineEntries.length - 1];
+  return EVENT_CONTENT[latest.type] || { title: formatEventLabel(latest.type), description: "" };
 };
 
 function Modal({ open, onClose, title, subtitle, children, wide = false }) {
@@ -46,7 +404,7 @@ function Modal({ open, onClose, title, subtitle, children, wide = false }) {
 }
 
 export default function App() {
-  const [screen, setScreen] = useState("ingestion");
+  const [screen, setScreen] = useState(() => getRouteFromPath(window.location.pathname));
   const [documents, setDocuments] = useState([]);
   const [apiHealthy, setApiHealthy] = useState(true);
   const [uploadOpen, setUploadOpen] = useState(false);
@@ -57,16 +415,48 @@ export default function App() {
   const [activeTabularProfile, setActiveTabularProfile] = useState(null);
   const [feedback, setFeedback] = useState("No upload in progress.");
   const [feedbackError, setFeedbackError] = useState(false);
+  const [chatQuestion, setChatQuestion] = useState("");
+  const [currentThreadId, setCurrentThreadId] = useState(null);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatRun, setChatRun] = useState(null);
+  const [chatEvents, setChatEvents] = useState([]);
+  const [chatError, setChatError] = useState("");
   const [formState, setFormState] = useState({
     file: null,
     document_type: "project_description",
     reporting_period: "",
   });
+  const eventSourceRef = useRef(null);
 
   useEffect(() => {
     void checkHealth();
     void loadDocuments();
   }, []);
+
+  useEffect(() => {
+    const normalizedRoute = getRouteFromPath(window.location.pathname);
+    const normalizedPath = getPathFromRoute(normalizedRoute);
+
+    if (window.location.pathname !== normalizedPath) {
+      window.history.replaceState({}, "", normalizedPath);
+    }
+
+    setScreen(normalizedRoute);
+
+    const handlePopState = () => {
+      setScreen(getRouteFromPath(window.location.pathname));
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  useEffect(
+    () => () => {
+      eventSourceRef.current?.close();
+    },
+    []
+  );
 
   const checkHealth = async () => {
     try {
@@ -152,6 +542,174 @@ export default function App() {
     }
   };
 
+  const handleChatSubmit = async (event) => {
+    event.preventDefault();
+    const question = chatQuestion.trim();
+    if (!question) {
+      setChatError("Enter a question to start a chat run.");
+      return;
+    }
+
+    eventSourceRef.current?.close();
+    setChatError("");
+    setChatEvents([]);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v1/chat/runs`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question, thread_id: currentThreadId }),
+      });
+      const payload = await response.json();
+      if (!response.ok) {
+        throw new Error(payload.detail || "Failed to start chat run.");
+      }
+
+      setCurrentThreadId(payload.thread_id);
+      setChatRun(payload);
+      setChatQuestion("");
+      setChatMessages((current) => [
+        ...current,
+        {
+          id: payload.user_message_id,
+          role: "user",
+          content: question,
+          status: "completed",
+        },
+        {
+          id: payload.assistant_message_id,
+          role: "assistant",
+          content: "",
+          status: "pending",
+        },
+      ]);
+
+      const source = new EventSource(`${API_BASE_URL}/api/v1/chat/runs/${payload.run_id}/events`);
+      eventSourceRef.current = source;
+
+      const appendEvent = (eventType, rawEvent) => {
+        const eventPayload = JSON.parse(rawEvent.data);
+        setChatEvents((current) => [
+          ...current,
+          {
+            id: `${eventType}-${eventPayload.event_id}`,
+            type: eventType,
+            payload: eventPayload,
+          },
+        ]);
+
+        if (eventType === "run_started") {
+          setChatRun((current) => (current ? { ...current, status: eventPayload.status } : current));
+          setChatMessages((current) =>
+            current.map((message) =>
+              message.id === payload.assistant_message_id
+                ? { ...message, status: eventPayload.status }
+                : message
+            )
+          );
+        }
+
+        if (eventType === "route_selected") {
+          setChatRun((current) => (current ? { ...current, route: eventPayload.route } : current));
+        }
+
+        if (eventType === "answer_chunk") {
+          setChatMessages((current) =>
+            current.map((message) =>
+              message.id === payload.assistant_message_id
+                ? { ...message, content: `${message.content}${eventPayload.delta || ""}`, status: "streaming" }
+                : message
+            )
+          );
+        }
+
+        if (eventType === "completed") {
+          setChatRun((current) => (current ? { ...current, status: eventPayload.status } : current));
+          setChatMessages((current) =>
+            current.map((message) =>
+              message.id === payload.assistant_message_id
+                ? { ...message, content: eventPayload.final_answer || message.content, status: "completed" }
+                : message
+            )
+          );
+          source.close();
+          eventSourceRef.current = null;
+        }
+
+        if (eventType === "error") {
+          setChatRun((current) => (current ? { ...current, status: eventPayload.status } : current));
+          setChatError(eventPayload.detail || "Chat run failed.");
+          setChatMessages((current) =>
+            current.map((message) =>
+              message.id === payload.assistant_message_id
+                ? { ...message, content: eventPayload.detail || "Chat run failed.", status: "failed" }
+                : message
+            )
+          );
+          source.close();
+          eventSourceRef.current = null;
+        }
+      };
+
+      [
+        "run_started",
+        "route_selected",
+        "document_agent_started",
+        "document_findings",
+        "data_agent_started",
+        "data_findings",
+        "direct_response_started",
+        "clarify_started",
+        "reporter_started",
+        "answer_chunk",
+        "completed",
+        "error",
+      ].forEach((eventType) => {
+        source.addEventListener(eventType, (rawEvent) => appendEvent(eventType, rawEvent));
+      });
+
+      source.onerror = () => {
+        if (source.readyState === EventSource.CLOSED) {
+          eventSourceRef.current = null;
+        }
+      };
+    } catch (error) {
+      setChatError(error.message || "Failed to start chat run.");
+    }
+  };
+
+  const handleChatKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      event.currentTarget.form?.requestSubmit();
+    }
+  };
+
+  const navigateTo = (route) => {
+    const nextPath = getPathFromRoute(route);
+    if (window.location.pathname !== nextPath) {
+      window.history.pushState({}, "", nextPath);
+    }
+    setScreen(route);
+  };
+
+  const handleNewChat = () => {
+    eventSourceRef.current?.close();
+    eventSourceRef.current = null;
+    setCurrentThreadId(null);
+    setChatMessages([]);
+    setChatRun(null);
+    setChatEvents([]);
+    setChatError("");
+    setChatQuestion("");
+  };
+
+  const timelineEntries = getTimelineEntries(chatEvents);
+  const currentStep = getCurrentStep(timelineEntries, chatRun?.status);
+  const chatIsRunning = Boolean(chatRun && !["completed", "failed"].includes(chatRun.status));
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -163,14 +721,14 @@ export default function App() {
 
         <nav className="nav">
           <button
-            className={`nav-link ${screen === "ingestion" ? "active" : ""}`}
-            onClick={() => setScreen("ingestion")}
+            className={`nav-link ${screen === "docs" ? "active" : ""}`}
+            onClick={() => navigateTo("docs")}
           >
             Data Ingestion
           </button>
           <button
             className={`nav-link ${screen === "chat" ? "active" : ""}`}
-            onClick={() => setScreen("chat")}
+            onClick={() => navigateTo("chat")}
           >
             Chat With Docs
           </button>
@@ -178,7 +736,7 @@ export default function App() {
       </aside>
 
       <main className="content">
-        {screen === "ingestion" ? (
+        {screen === "docs" ? (
           <>
             <header className="screen-header">
               <div>
@@ -274,11 +832,184 @@ export default function App() {
             </section>
           </>
         ) : (
-          <section className="panel placeholder-panel">
-            <span className="eyebrow">Next Step</span>
-            <h3>Chat With Docs</h3>
-            <p>This workspace will host retrieval and grounded responses over embedded chunks.</p>
-          </section>
+          <>
+            <header className="screen-header">
+              <div>
+                <span className="eyebrow">Conversation View</span>
+                <h2>Chat With Docs</h2>
+                <p>Ask a question, follow the current processing step, and expand the runtime timeline only when you need it.</p>
+              </div>
+
+              <div className="header-actions">
+                <div className="status-chip">{chatRun?.status || "idle"}</div>
+                <div className="status-chip">{chatRun?.route || "route pending"}</div>
+                <button className="secondary-btn" onClick={handleNewChat}>
+                  New Chat
+                </button>
+              </div>
+            </header>
+
+            <section className="panel chat-room-panel">
+              <div className="chat-room-header">
+                <div>
+                  <h3>Project Intelligence Assistant</h3>
+                </div>
+              </div>
+
+              <div className="chat-thread">
+                {!chatMessages.length ? (
+                  <div className="chat-empty-state">
+                    <span className="eyebrow">Ready</span>
+                    <h3>Start a conversation</h3>
+                    <p>Ask about Package V3 progress, milestones, risks, or commercial signals to begin a run.</p>
+                  </div>
+                ) : (
+                  chatMessages.map((message) => {
+                    const isUser = message.role === "user";
+                    const isActiveAssistantMessage = message.id === chatRun?.assistant_message_id;
+
+                    return (
+                      <article
+                        className={`message-row ${isUser ? "message-row-user" : "message-row-bot"}`}
+                        key={message.id}
+                      >
+                        {!isUser ? <div className="assistant-avatar">AI</div> : null}
+                        <div className="message-stack">
+                          <div
+                            className={`message-bubble ${
+                              isUser ? "message-bubble-user" : "message-bubble-bot"
+                            }`}
+                          >
+                            <div className="message-label">
+                              {isUser ? "You" : "Project Intelligence Assistant"}
+                            </div>
+
+                            {message.content ? (
+                              <div
+                                className={`message-body ${
+                                  isUser ? "message-body-user" : "assistant-answer"
+                                }`}
+                              >
+                                {isUser ? (
+                                  message.content
+                                ) : (
+                                  <MarkdownPreview content={message.content} />
+                                )}
+                              </div>
+                            ) : !isUser && isActiveAssistantMessage && !chatError ? (
+                              <div className="runtime-status-card">
+                                <div className="runtime-status-head">
+                                  <span className="loading-indicator" aria-hidden="true" />
+                                  <div>
+                                    <strong>{currentStep.title}</strong>
+                                    <div className="subtle-text">{currentStep.description}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : null}
+                          </div>
+
+                          {!isUser && isActiveAssistantMessage && timelineEntries.length ? (
+                            <details className="timeline-details">
+                              <summary>
+                                <span>Runtime timeline</span>
+                                <span className="subtle-text">{timelineEntries.length} step(s)</span>
+                              </summary>
+
+                              <div className="timeline-list">
+                                {timelineEntries.map((entry) => {
+                                  const content =
+                                    EVENT_CONTENT[entry.type] || {
+                                      title: formatEventLabel(entry.type),
+                                      description: "",
+                                    };
+
+                                  return (
+                                    <article className="timeline-item" key={entry.id}>
+                                      <div className="timeline-marker" aria-hidden="true" />
+                                      <div className="timeline-copy">
+                                        <div className="timeline-title-row">
+                                          <strong>{content.title}</strong>
+                                          <span className="subtle-text">
+                                            {entry.payload.timestamp
+                                              ? formatDate(entry.payload.timestamp)
+                                              : "No timestamp"}
+                                          </span>
+                                        </div>
+                                        <div className="subtle-text">{content.description}</div>
+
+                                        {entry.payload.route ? (
+                                          <div className="meta-pill-wrap">
+                                            <span className="meta-pill">route: {entry.payload.route}</span>
+                                          </div>
+                                        ) : null}
+
+                                        {entry.payload.findings?.length ? (
+                                          <div className="timeline-findings">
+                                            {entry.payload.findings.map((finding, index) => (
+                                              <div className="timeline-finding" key={`${entry.id}-finding-${index}`}>
+                                                <strong>{finding.claim}</strong>
+                                                <ul className="event-evidence-list">
+                                                  {finding.evidence?.map((evidence, evidenceIndex) => (
+                                                    <li key={`${entry.id}-evidence-${evidenceIndex}`}>
+                                                      <span>{evidence.source}</span>
+                                                      <span className="subtle-text">
+                                                        {evidence.citation} · {evidence.snippet}
+                                                      </span>
+                                                    </li>
+                                                  ))}
+                                                </ul>
+                                              </div>
+                                            ))}
+                                          </div>
+                                        ) : null}
+
+                                        {entry.payload.detail ? (
+                                          <div className="subtle-text">{entry.payload.detail}</div>
+                                        ) : null}
+                                      </div>
+                                    </article>
+                                  );
+                                })}
+                              </div>
+                            </details>
+                          ) : null}
+                        </div>
+                      </article>
+                    );
+                  })
+                )}
+              </div>
+
+              <form className="chat-composer" onSubmit={handleChatSubmit}>
+                <label className="chat-composer-field">
+                  <span>Question</span>
+                  <textarea
+                    value={chatQuestion}
+                    onChange={(event) => setChatQuestion(event.target.value)}
+                    onKeyDown={handleChatKeyDown}
+                    placeholder="Ask about Package V3 progress, risks, milestones, or commercial signals..."
+                    rows={3}
+                    disabled={chatIsRunning}
+                  />
+                </label>
+
+                <div className="chat-composer-footer">
+                  <div className={`feedback ${chatError ? "error" : ""}`}>
+                    {chatError ||
+                      (chatIsRunning
+                        ? "A run is in progress. The latest step is shown inside the assistant reply."
+                        : currentThreadId
+                          ? "Continue the current conversation, or start over with New Chat."
+                          : "Your message will appear on the right, and the assistant answer will appear on the left.")}
+                  </div>
+                  <button type="submit" className="primary-btn" disabled={chatIsRunning}>
+                    {chatIsRunning ? "Working..." : "Send Question"}
+                  </button>
+                </div>
+              </form>
+            </section>
+          </>
         )}
       </main>
 

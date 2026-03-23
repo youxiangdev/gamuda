@@ -15,13 +15,13 @@ async def create_chat_run(payload: ChatRunCreate) -> ChatRunCreated:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
 
     return ChatRunCreated(
-        run_id=run.id,
-        thread_id=run.thread_id,
-        user_message_id=run.user_message_id,
-        assistant_message_id=run.assistant_message_id,
-        question=run.question,
-        status=run.status,
-        created_at=run.created_at,
+        run_id=run["id"],
+        thread_id=run["thread_id"],
+        user_message_id=run["user_message_id"],
+        assistant_message_id=run["assistant_message_id"],
+        question=run["question"],
+        status=run["status"],
+        created_at=run["created_at"],
     )
 
 
