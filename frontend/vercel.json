@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/chat",
+      "destination": "/"
+    },
+    {
+      "source": "/docs",
+      "destination": "/"
+    }
+  ]
+}
