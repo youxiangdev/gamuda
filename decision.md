@@ -1,15 +1,4 @@
-# Decision: Data Preparation And Ingestion Logic
-
-## Overview
-
-The current submission focuses on building a reliable data preparation and ingestion layer for project documents. The goal is to transform uploaded files into retrieval-ready and analysis-ready artifacts while preserving traceability, structure, and business context.
-
-The ingestion strategy is split by document type:
-
-- `PDF` documents are treated as unstructured or semi-structured project knowledge and prepared for retrieval.
-- `CSV` / `XLSX` documents are treated as structured analytical data and prepared for code-based querying and analysis.
-
-This separation is intentional because narrative documents and tabular datasets have different retrieval and reasoning needs.
+# Decision Making
 
 ---
 
@@ -19,18 +8,29 @@ This separation is intentional because narrative documents and tabular datasets 
 
 PDF documents are parsed using `Docling`, which converts the source PDF into structured outputs such as Markdown and document JSON. These outputs are then used to build retrieval-ready chunks with preserved metadata.
 
+- for the current submission, default assumptions are:
+  - `project_id = east-metro`
+  - `package_id = v3`
+
 ### Document categories
 
 PDF uploads are handled as two business document types:
 
 - `project_description`
-- `progress_update`
+- `progress_update` -- required reporting_date field
 
-### 1.1 Project Description Documents
+### Why require reporting period at upload
+1. Progress reports are time-sensitive documents. If reporting date metadata is wrong or inferred incorrectly, retrieval quality and downstream reasoning will be unreliable.
+2. From an operational/admin perspective, uploading a monthly or progress report together with its reporting period is a natural and valid workflow.
 
-For `project_description` documents, the ingestion objective is to preserve business context and structure. These documents usually contain descriptive sections, milestone tables, package details, and narrative explanations.
 
-The chunking strategy is structure-aware rather than character-prefix-based. Chunks are formed around meaningful document boundaries such as:
+
+
+### 1.1 Documents Chunking Method
+
+For PDF documents, the ingestion objective is to preserve business context and structure. These documents usually contain descriptive sections, milestone tables, package details, and narrative explanations.
+
+The chunking strategy is **structure-aware** rather than character-prefix-based. Chunks are formed around meaningful document boundaries such as:
 
 - sections
 - paragraphs
@@ -48,30 +48,6 @@ For each chunk, the system stores relevant metadata such as:
 
 This makes retrieval more reliable because the answer layer can trace evidence back to a specific section or table instead of relying on arbitrary text windows.
 
-### 1.2 Progress Update Documents
-
-For `progress_update` documents, time is a critical business dimension. Because of that, the system requires the user to provide the reporting period during upload.
-
-Current assumptions:
-
-- `reporting_period` is mandatory for `progress_update`
-- the format is normalized as `YYYY-MM`
-- optional project-specific fields such as `project_id` and `package_id` can be supported
-- for the current submission, default assumptions are:
-  - `project_id = east-metro`
-  - `package_id = v3`
-
-### Why require reporting period at upload
-
-This is a deliberate business-level decision.
-
-Reasons:
-
-1. Progress reports are time-sensitive documents. If reporting date metadata is wrong or inferred incorrectly, retrieval quality and downstream reasoning will be unreliable.
-2. Requiring the reporting period during upload reduces ambiguity and avoids weak heuristics.
-3. From an operational/admin perspective, uploading a monthly or progress report together with its reporting period is a natural and valid workflow.
-4. This design makes cross-period comparison more dependable, which is important for milestone tracking, status reconciliation, and trend analysis.
-
 ---
 
 ## 2. Why This PDF Method Was Chosen
@@ -88,7 +64,7 @@ Main reasons:
 
 ### 2.2 Why not use VLM by default
 
-A VLM-based ingestion path is not the default choice for this submission.
+A VLM-based ingestion path is not the choice for this submission.
 
 Reasons:
 
@@ -154,6 +130,13 @@ Reasons:
 3. For tabular questions, code-based querying over parquet is more faithful than semantic retrieval over flattened text.
 4. Vectorization may still be useful later for metadata discovery or hybrid routing, but it should not replace analytical access to the table itself.
 
+NOTES (AFTER COMPLETING THE AGENT DEVELOPMENT, My Small conclusion on this mistake):
+1. after completing the whole process, I have changed my mind.
+2. I would like to try store the spreadsheet data into vector form and current data analysis approach
+3. Reason: 
+3.1: we could not make the assumption everyone using csv to store meaningful analytics data, some of them mix and use csv for documentation purpose, therefore loading the row into vector does enhance the reliability of the system.
+3.2: We could not make the assumption risk must use csv while progress only can use pdf, as real world situation this is depend on the admin/operation team but not us developer, so what we need to do is ensure the retrieving quality only.
+
 ### Final CSV / spreadsheet decision
 
 The selected default is:
@@ -204,7 +187,7 @@ This is the most practical choice for the current scope, complexity, and expecte
 
 ---
 
-## Final Summary
+## Final Summary for ingestion
 
 The ingestion and preparation strategy is based on one core principle:
 
@@ -218,3 +201,31 @@ Therefore:
 - `progress_update` documents require explicit reporting-period metadata at upload time
 - `CSV/XLSX` files are normalized into parquet for analysis instead of being forced into relational tables or vector chunks
 - `PostgreSQL + pgvector` is used as the simplest practical storage and retrieval foundation for the current project phase
+
+## 5. Agent designing
+
+For agent design, I am referencing codex/claude code while maintaining the current requirement to avoid overengineering. 
+
+For data agent, my main idea is we provide the context of the current db and the tools for llm to perform the query search on the current db, this approach ensure scalability on the db become larger. 
+The flow:
+
+`check current dataset(list dataset and describe dataset)`  --> `Identify which dataset to perform query` --> `use query dataset tools` --> `allow rerun the query to search the best answer` --> `complete the step or continue the looping`
+
+
+Also, I might introduce skill if the table become more and more, this approach allow reduce the noise in the context while maintaining the performance and retrieving quality.
+
+For document agent, my main idea here is let the agent get the correct answer by providing the tools and context as well. The main capability of the agent in my plan is 
+
+`agent perform rephrase`  --> `agent search using keyword/sentence` --> `identify the gap` --> `check if still needed to search` --> `complete the step or continue the looping`
+
+To make the current implementation lightweighting, I concatenate the agent into this current one agent.
+
+The reason I am not employing the reranking approach
+1. based on my own experience, most of the time, the retrieval not good is because of the query, reranking might not be solving the problem as reranking idea is 
+
+`query/rephrase query`  --> `search top k =50 based on query` --> `reranking` --> `final answer`
+
+If the root cause is the query, this method might still not provide the accurate answer.
+
+For overall agent design, I get the idea from multi-agent concept.
+The sub agent will have its own workspace to workaround, and only provide the final output to the reporter, to ensure the context is clean and manageable prompt length. This approach allow the subagent to try and error on the finding.
