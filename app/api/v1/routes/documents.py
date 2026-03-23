@@ -1,4 +1,5 @@
 from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, UploadFile, status
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
@@ -6,6 +7,7 @@ from app.schemas.chunk import DocumentChunkRead
 from app.schemas.document import (
     DocumentOverviewRead,
     DocumentRead,
+    DocumentFileViewRead,
     DocumentUploadResponse,
     TabularProfileRead,
 )
@@ -89,3 +91,20 @@ def list_document_chunks(document_id: str, db: Session = Depends(get_db)) -> lis
 def get_tabular_profile(document_id: str, db: Session = Depends(get_db)) -> TabularProfileRead:
     profile = DocumentService(db).get_tabular_profile(document_id)
     return TabularProfileRead.model_validate(profile)
+
+
+@router.get("/{document_id}/viewer", response_model=DocumentFileViewRead)
+def get_document_file_view(document_id: str, db: Session = Depends(get_db)) -> DocumentFileViewRead:
+    payload = DocumentService(db).get_document_file_view(document_id)
+    return DocumentFileViewRead.model_validate(payload)
+
+
+@router.get("/{document_id}/file")
+def get_document_file(document_id: str, db: Session = Depends(get_db)) -> FileResponse:
+    document, file_path = DocumentService(db).get_document_file_path(document_id)
+    return FileResponse(
+        path=file_path,
+        media_type=document.content_type or "application/octet-stream",
+        filename=document.original_filename,
+        headers={"Content-Disposition": f'inline; filename="{document.original_filename}"'},
+    )

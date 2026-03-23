@@ -4,6 +4,5 @@
 .venv/
 frontend/node_modules/
 frontend/dist/
-storage/
 __pycache__/
 *.egg-info/

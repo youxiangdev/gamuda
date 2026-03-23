@@ -79,3 +79,16 @@ class TabularProfileRead(BaseModel):
     datasets: list[TabularDatasetProfileRead]
     repair_summary: TabularRepairSummaryRead | None = None
     repair_log: list[TabularRepairLogEntryRead] = []
+
+
+class DocumentFileSheetRead(BaseModel):
+    sheet_name: str
+    columns: list[str]
+    row_count: int
+    rows: list[dict[str, object | None]]
+
+
+class DocumentFileViewRead(BaseModel):
+    viewer_type: str
+    file_url: str | None = None
+    sheets: list[DocumentFileSheetRead] = []

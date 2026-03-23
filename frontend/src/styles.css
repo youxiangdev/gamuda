@@ -311,6 +311,11 @@ code {
   min-width: 150px;
 }
 
+.action-stack {
+  display: grid;
+  gap: 10px;
+}
+
 .documents-table th:last-child,
 .documents-table td:last-child {
   position: sticky;
@@ -789,6 +794,63 @@ code {
 .modal-list {
   display: grid;
   gap: 14px;
+}
+
+.file-viewer-shell {
+  display: grid;
+  gap: 14px;
+}
+
+.file-viewer-toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.file-open-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.file-viewer-frame {
+  width: 100%;
+  min-height: 72vh;
+  border: 1px solid var(--line-soft);
+  border-radius: 18px;
+  background: #fff;
+}
+
+.sheet-tab-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sheet-tab {
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.sheet-tab.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.file-table-wrap {
+  max-height: 62vh;
+}
+
+.viewer-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #fffaf1;
 }
 
 .chunk-card {

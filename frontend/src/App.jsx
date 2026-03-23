@@ -2,6 +2,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 const DEFAULT_ROUTE = "docs";
+const buildApiUrl = (path) => new URL(path, API_BASE_URL).toString();
 
 const getRouteFromPath = (pathname) => {
   if (pathname === "/chat") return "chat";
@@ -407,9 +408,14 @@ export default function App() {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [chunkOpen, setChunkOpen] = useState(false);
   const [dataOpen, setDataOpen] = useState(false);
+  const [fileOpen, setFileOpen] = useState(false);
   const [activeDocument, setActiveDocument] = useState(null);
   const [activeChunks, setActiveChunks] = useState([]);
   const [activeTabularProfile, setActiveTabularProfile] = useState(null);
+  const [activeFileView, setActiveFileView] = useState(null);
+  const [activeFileSheet, setActiveFileSheet] = useState("");
+  const [fileViewerLoading, setFileViewerLoading] = useState(false);
+  const [fileViewerError, setFileViewerError] = useState("");
   const [feedback, setFeedback] = useState("No upload in progress.");
   const [feedbackError, setFeedbackError] = useState(false);
   const [chatQuestion, setChatQuestion] = useState("");
@@ -607,6 +613,40 @@ export default function App() {
     }
   };
 
+  const openFileViewer = async (documentRecord) => {
+    setActiveDocument(documentRecord);
+    setActiveFileView(null);
+    setActiveFileSheet("");
+    setFileViewerError("");
+    setFileViewerLoading(true);
+    setFileOpen(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v1/documents/${documentRecord.id}/viewer`);
+      const payload = await response.json();
+      if (!response.ok) {
+        throw new Error(payload.detail || "Failed to load file viewer.");
+      }
+
+      setActiveFileView(payload);
+      if (payload.viewer_type === "tabular" && payload.sheets?.length) {
+        setActiveFileSheet(payload.sheets[0].sheet_name);
+      }
+    } catch (error) {
+      setFileViewerError(error.message || "Failed to load file viewer.");
+    } finally {
+      setFileViewerLoading(false);
+    }
+  };
+
+  const closeFileViewer = () => {
+    setFileOpen(false);
+    setActiveFileView(null);
+    setActiveFileSheet("");
+    setFileViewerError("");
+    setFileViewerLoading(false);
+  };
+
   const handleChatSubmit = async (event) => {
     event.preventDefault();
     const question = chatQuestion.trim();
@@ -780,6 +820,10 @@ export default function App() {
   const timelineEntries = getTimelineEntries(chatEvents);
   const currentStep = getCurrentStep(timelineEntries, chatRun?.status);
   const chatIsRunning = Boolean(chatRun && !["completed", "failed"].includes(chatRun.status));
+  const currentFileSheet =
+    activeFileView?.sheets?.find((sheet) => sheet.sheet_name === activeFileSheet) ||
+    activeFileView?.sheets?.[0] ||
+    null;
 
   return (
     <div className="app-shell">
@@ -876,15 +920,20 @@ export default function App() {
                           </td>
                           <td>{document.chunk_count}</td>
                           <td className="action-cell">
-                            {document.extension === ".pdf" ? (
-                              <button className="secondary-btn" onClick={() => openChunkPreview(document)}>
-                                Preview Chunks
+                            <div className="action-stack">
+                              <button className="secondary-btn" onClick={() => openFileViewer(document)}>
+                                View File
                               </button>
-                            ) : (
-                              <button className="secondary-btn" onClick={() => openDataPreview(document)}>
-                                Preview Data
-                              </button>
-                            )}
+                              {document.extension === ".pdf" ? (
+                                <button className="secondary-btn" onClick={() => openChunkPreview(document)}>
+                                  Preview Chunks
+                                </button>
+                              ) : (
+                                <button className="secondary-btn" onClick={() => openDataPreview(document)}>
+                                  Preview Data
+                                </button>
+                              )}
+                            </div>
                           </td>
                         </tr>
                       ))
@@ -1138,6 +1187,121 @@ export default function App() {
             </button>
           </div>
         </form>
+      </Modal>
+
+      <Modal
+        open={fileOpen}
+        onClose={closeFileViewer}
+        title={activeDocument?.original_filename || "View File"}
+        subtitle="Original File"
+        wide
+      >
+        {activeDocument ? (
+          <>
+            <div className="modal-meta">
+              <div className="meta-card">
+                <strong>Type</strong>
+                <div>{activeDocument.document_type || "n/a"}</div>
+              </div>
+              <div className="meta-card">
+                <strong>Format</strong>
+                <div>{activeDocument.extension || "n/a"}</div>
+              </div>
+              <div className="meta-card">
+                <strong>Size</strong>
+                <div>{formatFileSize(activeDocument.file_size)}</div>
+              </div>
+              <div className="meta-card">
+                <strong>Status</strong>
+                <div>{activeDocument.latest_ingestion_status || "pending"}</div>
+              </div>
+            </div>
+
+            {fileViewerLoading ? (
+              <div className="note-box">Loading the full file view...</div>
+            ) : fileViewerError ? (
+              <div className="note-box">{fileViewerError}</div>
+            ) : activeFileView?.viewer_type === "pdf" && activeFileView.file_url ? (
+              <div className="file-viewer-shell">
+                <div className="file-viewer-toolbar">
+                  <a
+                    className="secondary-btn file-open-link"
+                    href={buildApiUrl(activeFileView.file_url)}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Open In New Tab
+                  </a>
+                </div>
+                <iframe
+                  className="file-viewer-frame"
+                  src={buildApiUrl(activeFileView.file_url)}
+                  title={activeDocument.original_filename}
+                />
+              </div>
+            ) : currentFileSheet ? (
+              <div className="file-viewer-shell">
+                {activeFileView.sheets.length > 1 ? (
+                  <div className="sheet-tab-row">
+                    {activeFileView.sheets.map((sheet) => (
+                      <button
+                        key={sheet.sheet_name}
+                        className={`sheet-tab ${sheet.sheet_name === currentFileSheet.sheet_name ? "active" : ""}`}
+                        onClick={() => setActiveFileSheet(sheet.sheet_name)}
+                        type="button"
+                      >
+                        {sheet.sheet_name}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+
+                <article className="chunk-card">
+                  <div className="chunk-card-header">
+                    <div>
+                      <strong>{currentFileSheet.sheet_name}</strong>
+                      <div className="subtle-text">
+                        {currentFileSheet.row_count} row(s) · {currentFileSheet.columns.length} column(s)
+                      </div>
+                    </div>
+                    <span className="meta-pill">full file</span>
+                  </div>
+
+                  <div className="table-wrap file-table-wrap">
+                    <table className="sample-table viewer-table">
+                      <thead>
+                        <tr>
+                          {currentFileSheet.columns.map((column) => (
+                            <th key={`${currentFileSheet.sheet_name}-column-${column}`}>{column}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {currentFileSheet.rows.length ? (
+                          currentFileSheet.rows.map((row, rowIndex) => (
+                            <tr key={`${currentFileSheet.sheet_name}-row-${rowIndex}`}>
+                              {currentFileSheet.columns.map((column) => (
+                                <td key={`${currentFileSheet.sheet_name}-row-${rowIndex}-${column}`}>
+                                  {row[column] ?? "null"}
+                                </td>
+                              ))}
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={currentFileSheet.columns.length || 1}>No rows available.</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </article>
+              </div>
+            ) : (
+              <div className="note-box">This file does not have a direct viewer yet.</div>
+            )}
+          </>
+        ) : null}
       </Modal>
 
       <Modal

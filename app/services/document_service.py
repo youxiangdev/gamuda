@@ -1,8 +1,10 @@
 from pathlib import Path
+from datetime import date, datetime
 import json
 import re
 
 from fastapi import HTTPException, UploadFile, status
+import pandas as pd
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -81,6 +83,79 @@ class DocumentService:
 
         return json.loads(profile_path.read_text(encoding="utf-8"))
 
+    def get_document_file_path(self, document_id: str) -> tuple[Document, Path]:
+        document = self.get_document(document_id)
+        if document is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document not found.")
+
+        file_path = Path(document.storage_path)
+        if not file_path.exists():
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Stored file not found.")
+
+        return document, file_path
+
+    def get_document_file_view(self, document_id: str) -> dict[str, object]:
+        document = self.get_document(document_id)
+        if document is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document not found.")
+
+        if document.extension == ".pdf":
+            self.get_document_file_path(document_id)
+            return {
+                "viewer_type": "pdf",
+                "file_url": f"/api/v1/documents/{document_id}/file",
+                "sheets": [],
+            }
+
+        if document.extension in {".csv", ".xlsx"}:
+            return {
+                "viewer_type": "tabular",
+                "sheets": self._get_tabular_view_sheets(document),
+            }
+
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Direct file viewing is not supported for this file type.",
+        )
+
+    def _get_tabular_view_sheets(self, document: Document) -> list[dict[str, object]]:
+        artifact_dir = self.storage_service.ensure_artifact_dir(document.id)
+        profile_path = artifact_dir / "tabular_profile.json"
+
+        if profile_path.exists():
+            profile = json.loads(profile_path.read_text(encoding="utf-8"))
+            datasets = profile.get("datasets") or []
+            sheets = []
+            for dataset in datasets:
+                parquet_path = Path(str(dataset.get("parquet_path") or ""))
+                if not parquet_path.is_absolute():
+                    parquet_path = artifact_dir / parquet_path.name
+                if not parquet_path.exists():
+                    continue
+
+                dataframe = pd.read_parquet(parquet_path)
+                sheets.append(
+                    self._dataframe_to_sheet(
+                        str(dataset.get("dataset_name") or parquet_path.stem),
+                        dataframe,
+                    )
+                )
+
+            if sheets:
+                return sheets
+
+        _, file_path = self.get_document_file_path(document.id)
+
+        if document.extension == ".csv":
+            dataframe = pd.read_csv(file_path, dtype=object, keep_default_na=True)
+            return [self._dataframe_to_sheet("CSV", dataframe)]
+
+        workbook = pd.read_excel(file_path, sheet_name=None, dtype=object)
+        return [
+            self._dataframe_to_sheet(sheet_name, dataframe)
+            for sheet_name, dataframe in workbook.items()
+        ]
+
     def list_document_overviews(self) -> list[dict[str, object]]:
         documents = self.list_documents()
         overviews: list[dict[str, object]] = []
@@ -149,3 +224,44 @@ class DocumentService:
             return normalized
 
         return None
+
+    def _dataframe_to_sheet(self, sheet_name: str, dataframe: pd.DataFrame) -> dict[str, object]:
+        normalized = dataframe.copy()
+        normalized.columns = [str(column) for column in normalized.columns]
+        normalized = normalized.where(pd.notna(normalized), None)
+
+        rows = [
+            {
+                column: self._normalize_cell_value(value)
+                for column, value in row.items()
+            }
+            for row in normalized.to_dict(orient="records")
+        ]
+
+        return {
+            "sheet_name": sheet_name,
+            "columns": list(normalized.columns),
+            "row_count": len(rows),
+            "rows": rows,
+        }
+
+    def _normalize_cell_value(self, value: object) -> object | None:
+        if value is None:
+            return None
+
+        if hasattr(value, "item") and not isinstance(value, (str, bytes)):
+            try:
+                value = value.item()
+            except (ValueError, TypeError):
+                pass
+
+        if isinstance(value, (datetime, date)):
+            return value.isoformat()
+
+        if isinstance(value, bytes):
+            return value.decode("utf-8", errors="replace")
+
+        if isinstance(value, (str, int, float, bool)):
+            return value
+
+        return str(value)
