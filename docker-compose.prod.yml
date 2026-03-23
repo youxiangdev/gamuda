@@ -1,0 +1,47 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gamuda-app-prod
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      JINA_API_KEY: ${JINA_API_KEY}
+      JINA_EMBEDDING_MODEL: ${JINA_EMBEDDING_MODEL:-jina-embeddings-v5-text-small}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      ROUTER_PROVIDER: ${ROUTER_PROVIDER:-groq}
+      ROUTER_MODEL: ${ROUTER_MODEL:-openai/gpt-oss-120b}
+      DOCUMENT_AGENT_PROVIDER: ${DOCUMENT_AGENT_PROVIDER:-groq}
+      DOCUMENT_AGENT_MODEL: ${DOCUMENT_AGENT_MODEL:-openai/gpt-oss-120b}
+      DATA_AGENT_PROVIDER: ${DATA_AGENT_PROVIDER:-groq}
+      DATA_AGENT_MODEL: ${DATA_AGENT_MODEL:-openai/gpt-oss-120b}
+      REPORTER_PROVIDER: ${REPORTER_PROVIDER:-groq}
+      REPORTER_MODEL: ${REPORTER_MODEL:-openai/gpt-oss-20b}
+      CORS_ALLOW_ORIGINS: ${CORS_ALLOW_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
+      STORAGE_DIR: ${STORAGE_DIR:-storage/uploads}
+      ARTIFACTS_DIR: ${ARTIFACTS_DIR:-storage/artifacts}
+      AGENT_LOG_PATH: ${AGENT_LOG_PATH:-storage/logs/agent_calls.jsonl}
+      AGENT_LOG_INCLUDE_CONTENT: ${AGENT_LOG_INCLUDE_CONTENT:-true}
+      LLM_PRICING_FILE: ${LLM_PRICING_FILE:-app/ai/llm_pricing.yaml}
+      LANGSMITH_TRACING: ${LANGSMITH_TRACING:-false}
+      LANGSMITH_API_KEY: ${LANGSMITH_API_KEY}
+      LANGSMITH_PROJECT: ${LANGSMITH_PROJECT}
+      PORT: ${PORT:-8000}
+    ports:
+      - "${APP_PORT:-8000}:${PORT:-8000}"
+    volumes:
+      - app_storage:/app/storage
+    command:
+      [
+        "sh",
+        "-c",
+        "exec /app/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
+      ]
+
+volumes:
+  app_storage:
