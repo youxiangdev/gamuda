@@ -182,7 +182,7 @@ class DocumentToolRuntime:
             "document_id": chunk.document_id,
             "source": chunk.source_doc,
             "citation": citation,
-            "snippet": self._build_snippet(chunk.raw_text),
+            "snippet": self._build_snippet(chunk.raw_text, chunk_kind=chunk.chunk_kind),
             "page_span": list(chunk.page_span or []),
             "heading_path": list(chunk.heading_path or []),
             "chunk_kind": chunk.chunk_kind,
@@ -209,8 +209,12 @@ class DocumentToolRuntime:
             parts.append(f"section={' > '.join(chunk.heading_path)}")
         return " | ".join(parts)
 
-    def _build_snippet(self, text: str, limit: int = 220) -> str:
+    def _build_snippet(self, text: str, *, chunk_kind: str, limit: int = 220) -> str:
         cleaned = " ".join((text or "").split())
+        if chunk_kind == "table":
+            # Preserve full table rows when practical so the agent can compare values
+            # instead of falling back to weaker narrative chunks.
+            return cleaned[:1200].strip()
         return cleaned[:limit].strip()
 
 

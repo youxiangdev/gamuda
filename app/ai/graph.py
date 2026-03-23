@@ -37,6 +37,7 @@ from app.core.config import get_settings
 from app.db.session import SessionLocal
 
 MAX_SPECIALIST_TOOL_ROUNDS = 5
+MAX_SPECIALIST_RETRY_ATTEMPTS = 3
 
 
 def _chunk_answer(text: str) -> list[str]:
@@ -231,6 +232,32 @@ def _parse_findings_payload(
             return fallback
 
 
+def _is_retryable_specialist_error(exc: Exception) -> bool:
+    text = str(exc)
+    markers = (
+        "output_parse_failed",
+        "tool_use_failed",
+        "attempted to call tool 'json'",
+        "Parsing failed. The model generated output that could not be parsed.",
+    )
+    return any(marker in text for marker in markers)
+
+
+def _build_specialist_retry_message(*, error_text: str, allowed_tools: list[str]) -> HumanMessage:
+    tool_names = ", ".join(allowed_tools)
+    return HumanMessage(
+        content=(
+            "Your previous response was invalid for the provider API.\n"
+            f"Provider error: {error_text}\n\n"
+            "Retry and follow these rules exactly:\n"
+            f"- If you need another retrieval step, call only one of these tools: {tool_names}\n"
+            "- If you already have enough evidence, return only the final JSON findings object.\n"
+            "- Do not call any made-up tool such as `json`.\n"
+            "- Do not include chain-of-thought, analysis, or explanatory prose outside the final JSON."
+        )
+    )
+
+
 async def _invoke_tool_call(tool_call: dict[str, Any], tools_by_name: dict[str, Any]) -> ToolMessage:
     tool_name = str(tool_call.get("name") or "").strip()
     tool_call_id = str(tool_call.get("id") or "").strip()
@@ -260,24 +287,55 @@ async def _run_bounded_specialist_agent(
     tool_rounds = 0
     tools_by_name = {tool.name: tool for tool in tools}
     tool_enabled_model = agent.model.bind_tools(tools)
+    retry_attempts = 0
 
     while True:
-        response, _ = await agent.ainvoke_message(
-            transcript,
-            run_id=state["id"],
-            config=config,
-            model_override=tool_enabled_model,
-        )
-        transcript.append(response)
-        react_messages.append(response)
+        try:
+            response, _ = await agent.ainvoke_message(
+                transcript,
+                run_id=state["id"],
+                config=config,
+                model_override=tool_enabled_model,
+            )
+            retry_attempts = 0
+        except Exception as exc:
+            if _is_retryable_specialist_error(exc) and retry_attempts < MAX_SPECIALIST_RETRY_ATTEMPTS:
+                retry_attempts += 1
+                transcript.append(
+                    _build_specialist_retry_message(
+                        error_text=str(exc),
+                        allowed_tools=sorted(tools_by_name),
+                    )
+                )
+                continue
+
+            if _is_retryable_specialist_error(exc) and any(isinstance(message, ToolMessage) for message in transcript):
+                transcript.append(
+                    HumanMessage(
+                        content=(
+                            "Provider retries were exhausted. Based only on the evidence already retrieved in this "
+                            "conversation, return the final JSON findings now. Do not call any more tools."
+                        )
+                    )
+                )
+                break
+
+            raise
 
         tool_calls = getattr(response, "tool_calls", None) or []
         if not tool_calls:
+            transcript.append(response)
+            react_messages.append(response)
             return react_messages, False
 
         if tool_rounds >= MAX_SPECIALIST_TOOL_ROUNDS:
+            # Do not carry an unresolved assistant tool-call message into the
+            # forced finalization step; providers reject that transcript shape.
+            react_messages.append(response)
             break
 
+        transcript.append(response)
+        react_messages.append(response)
         tool_rounds += 1
         for tool_call in tool_calls:
             tool_message = await _invoke_tool_call(tool_call, tools_by_name)
@@ -293,16 +351,14 @@ async def _run_bounded_specialist_agent(
         )
     )
     try:
-        final_payload, raw_message, _ = await agent.ainvoke_structured(
-            {"messages": transcript},
-            schema,
+        raw_message, _ = await agent.ainvoke_message(
+            transcript,
             run_id=state["id"],
             config=config,
         )
         react_messages.append(raw_message)
-        react_messages.append(
-            AIMessage(content=json.dumps(final_payload.model_dump(), ensure_ascii=True))
-        )
+        final_payload = _parse_findings_payload(react_messages, schema)
+        react_messages[-1] = AIMessage(content=json.dumps(final_payload.model_dump(), ensure_ascii=True))
     except Exception:
         react_messages.append(
             AIMessage(content=json.dumps({"findings": [], "insufficient_evidence": True}, ensure_ascii=True))

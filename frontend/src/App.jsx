@@ -38,17 +38,14 @@ const formatEventLabel = (eventType) =>
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
 
-const INLINE_MARKDOWN_PATTERN =
-  /(`([^`]+)`)|(\[([^\]]+)\]\((https?:\/\/[^\s)]+)\))|(\*\*([^*]+)\*\*)|(\*([^*]+)\*)/g;
-
 const renderInlineMarkdown = (text, keyPrefix) => {
+  const inlineMarkdownPattern =
+    /(`([^`]+)`)|(\[([^\]]+)\]\((https?:\/\/[^\s)]+)\))|(\*\*([^*]+)\*\*)|(\*([^*]+)\*)/g;
   const nodes = [];
   let lastIndex = 0;
   let match;
 
-  INLINE_MARKDOWN_PATTERN.lastIndex = 0;
-
-  while ((match = INLINE_MARKDOWN_PATTERN.exec(text)) !== null) {
+  while ((match = inlineMarkdownPattern.exec(text)) !== null) {
     if (match.index > lastIndex) {
       nodes.push(text.slice(lastIndex, match.index));
     }
@@ -427,6 +424,7 @@ export default function App() {
     reporting_period: "",
   });
   const eventSourceRef = useRef(null);
+  const completionCheckTimeoutRef = useRef(null);
 
   useEffect(() => {
     void checkHealth();
@@ -454,9 +452,76 @@ export default function App() {
   useEffect(
     () => () => {
       eventSourceRef.current?.close();
+      if (completionCheckTimeoutRef.current) {
+        window.clearTimeout(completionCheckTimeoutRef.current);
+      }
     },
     []
   );
+
+  const clearCompletionCheck = () => {
+    if (completionCheckTimeoutRef.current) {
+      window.clearTimeout(completionCheckTimeoutRef.current);
+      completionCheckTimeoutRef.current = null;
+    }
+  };
+
+  const reconcileRunState = async (threadId, assistantMessageId) => {
+    if (!threadId || !assistantMessageId) {
+      return false;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v1/chat/threads/${threadId}`);
+      if (!response.ok) {
+        return false;
+      }
+
+      const thread = await response.json();
+      const assistantMessage = thread.messages?.find((message) => message.id === assistantMessageId);
+      if (!assistantMessage || !["completed", "failed"].includes(assistantMessage.status)) {
+        return false;
+      }
+
+      setChatRun((current) =>
+        current
+          ? {
+              ...current,
+              status: assistantMessage.status,
+            }
+          : current
+      );
+      setChatMessages((current) =>
+        current.map((message) =>
+          message.id === assistantMessageId
+            ? {
+                ...message,
+                content: assistantMessage.content || message.content,
+                status: assistantMessage.status,
+              }
+            : message
+        )
+      );
+
+      if (assistantMessage.status === "failed") {
+        setChatError(assistantMessage.content || "Chat run failed.");
+      }
+
+      eventSourceRef.current?.close();
+      eventSourceRef.current = null;
+      clearCompletionCheck();
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const scheduleCompletionCheck = (threadId, assistantMessageId) => {
+    clearCompletionCheck();
+    completionCheckTimeoutRef.current = window.setTimeout(() => {
+      void reconcileRunState(threadId, assistantMessageId);
+    }, 1500);
+  };
 
   const checkHealth = async () => {
     try {
@@ -551,6 +616,7 @@ export default function App() {
     }
 
     eventSourceRef.current?.close();
+    clearCompletionCheck();
     setChatError("");
     setChatEvents([]);
 
@@ -623,9 +689,11 @@ export default function App() {
                 : message
             )
           );
+          scheduleCompletionCheck(payload.thread_id, payload.assistant_message_id);
         }
 
         if (eventType === "completed") {
+          clearCompletionCheck();
           setChatRun((current) => (current ? { ...current, status: eventPayload.status } : current));
           setChatMessages((current) =>
             current.map((message) =>
@@ -639,6 +707,7 @@ export default function App() {
         }
 
         if (eventType === "error") {
+          clearCompletionCheck();
           setChatRun((current) => (current ? { ...current, status: eventPayload.status } : current));
           setChatError(eventPayload.detail || "Chat run failed.");
           setChatMessages((current) =>
@@ -671,6 +740,7 @@ export default function App() {
       });
 
       source.onerror = () => {
+        void reconcileRunState(payload.thread_id, payload.assistant_message_id);
         if (source.readyState === EventSource.CLOSED) {
           eventSourceRef.current = null;
         }
@@ -698,6 +768,7 @@ export default function App() {
   const handleNewChat = () => {
     eventSourceRef.current?.close();
     eventSourceRef.current = null;
+    clearCompletionCheck();
     setCurrentThreadId(null);
     setChatMessages([]);
     setChatRun(null);
