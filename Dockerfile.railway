@@ -22,12 +22,16 @@ COPY pyproject.toml uv.lock ./
 COPY app ./app
 COPY README.md architecture.md decision.md ./
 
-# Install the locked app dependencies, then replace GPU-enabled PyTorch with
-# CPU-only wheels so the runtime stays the same without the CUDA image bloat.
-RUN uv sync --frozen --no-cache --no-install-package torch --no-install-package torchvision \
-    && uv pip install --python .venv/bin/python --no-cache --torch-backend cpu \
+# Export the locked dependencies minus PyTorch, then install CPU-only torch
+# explicitly so Railway does not pull the CUDA package set.
+RUN uv export --format requirements.txt --frozen --no-header --no-annotate --no-hashes \
+        --no-emit-project --prune torch --prune torchvision > requirements.lock.txt \
+    && uv venv /app/.venv \
+    && uv pip install --python /app/.venv/bin/python --no-cache -r requirements.lock.txt \
+    && uv pip install --python /app/.venv/bin/python --no-cache --torch-backend cpu \
         torch==${TORCH_VERSION} torchvision==${TORCHVISION_VERSION} \
-    && rm -rf /root/.cache /app/.cache
+    && uv pip install --python /app/.venv/bin/python --no-cache --no-deps . \
+    && rm -rf /root/.cache /app/.cache requirements.lock.txt
 
 EXPOSE 8000
 
