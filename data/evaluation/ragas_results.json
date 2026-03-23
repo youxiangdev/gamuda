@@ -1,0 +1,1101 @@
+{
+  "generated_at": "2026-03-23T10:51:18.850084+00:00",
+  "results": [
+    {
+      "id": "TC-01",
+      "difficulty": "Easy",
+      "question": "What was the overall actual progress for Package V3 in January 2026?",
+      "route_expectation": "document",
+      "route": "document",
+      "runtime_success": true,
+      "error_type": null,
+      "error_detail": null,
+      "generated_answer": "**Overall actual progress for Package\u202fV3 in January\u202f2026:**  \n- 31.5\u202f% of the planned work was completed (vs. 32.0\u202f% planned).  \n\n(Claim supported by the Monthly Status Report Jan\u202f2026, Executive Summary section)",
+      "retrieved_contexts": [
+        "Package V3 closed January at overall actual progress of 31.5% against planned 32.0% . Overall project health remains Amber . Viaduct works continued to advance steadily, but Cheras North enabling and utilities activities"
+      ],
+      "citations": [
+        "document=Monthly Status Report Jan 2026.pdf | chunk=d75a7ec8-a906-4582-a7fe-2a4b8cd11ca0_chunk_0002 | pages=1 | section=1. Executive Summary"
+      ],
+      "document_findings": {
+        "findings": [
+          {
+            "claim": "Package V3 had an overall actual progress of 31.5% in January 2026.",
+            "evidence": [
+              {
+                "source": "Monthly Status Report Jan 2026.pdf",
+                "citation": "document=Monthly Status Report Jan 2026.pdf | chunk=d75a7ec8-a906-4582-a7fe-2a4b8cd11ca0_chunk_0002 | pages=1 | section=1. Executive Summary",
+                "snippet": "Package V3 closed January at overall actual progress of 31.5% against planned 32.0% . Overall project health remains Amber . Viaduct works continued to advance steadily, but Cheras North enabling and utilities activities"
+              }
+            ]
+          }
+        ],
+        "insufficient_evidence": false
+      },
+      "data_findings": {
+        "findings": [],
+        "insufficient_evidence": false
+      },
+      "route_match": true,
+      "has_citations": true,
+      "has_retrieved_contexts": true,
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy"
+      ],
+      "metric_scores": {
+        "faithfulness": null,
+        "answer_relevancy": 1.0
+      },
+      "metric_errors": {
+        "faithfulness": "RAGAS returned no numeric score."
+      },
+      "notes": [],
+      "duration_ms": 4268.16,
+      "expected_sources": [
+        "monthly_status_report_jan_2026.md"
+      ],
+      "expected_answer_points": [
+        "State actual progress as 31.5%",
+        "State planned progress as 32.0%",
+        "Stay narrowly scoped to January 2026 Package V3 progress"
+      ],
+      "scope": "core",
+      "average_metric_score": 1.0
+    },
+    {
+      "id": "TC-02",
+      "difficulty": "Easy",
+      "question": "Which station package showed worse schedule slippage in February 2026, Pandan Gateway or Cheras North, and what was the evidence?",
+      "route_expectation": "document",
+      "route": "document",
+      "runtime_success": true,
+      "error_type": null,
+      "error_detail": null,
+      "generated_answer": "**Answer:**  \nCheras\u202fNorth showed the worse schedule slippage in February\u202f2026.  \n\n**Evidence** \u2013 The Monthly Status Report\u202fFeb\u202f2026 shows that for Cheras\u202fNorth the planned progress was 29\u202f% while the actual progress was only 25\u202f% (a 4\u202f% gap), whereas for Pandan\u202fGateway the planned progress was 33\u202f% and the actual progress was 32\u202f% (a 1\u202f% gap)\u3010source: Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0004 | pages=1,2 | section=3. Package Progress Snapshot\u3011.",
+      "retrieved_contexts": [
+        "Viaduct Civil Works, Planned % = 42.0. Viaduct Civil Works, Actual % = 41.0. Viaduct Civil Works, Commentary = Weather reduced crane windows and pour productivity. Pandan Gateway Station Structural and Architectural, Planned % = 33.0. Pandan Gateway Station Structural and Architectural, Actual % = 32.0. Pandan Gateway Station Structural and Architectural, Commentary = Slightly behind but manageable Cheras North Station Structural and Architectural, Planned % = 29.0. Cheras North Station Structural and Architectural, Actual % = 25.0. Cheras North Station Structural and Architectural, Commentary = Utility conflict and redesign sequence delayed progress. Utilities Relocation, Planned % = 49.0. Utilities Relocation, Actual % = 43.0. Utilities Relocation, Commentary = Critical diversions remain incomplete. Systems Interface Design, Planned % = 57.0. Systems Interface Design, Actual % = 55.0. Systems Interface Design, Commentary = Partial approval only; phased submission made"
+      ],
+      "citations": [
+        "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0004 | pages=1,2 | section=3. Package Progress Snapshot"
+      ],
+      "document_findings": {
+        "findings": [
+          {
+            "claim": "In February\u202f2026, the Cheras\u202fNorth station package showed greater schedule slippage than the Pandan\u202fGateway station package (planned vs. actual 29% vs. 25% for Cheras\u202fNorth versus 33% vs. 32% for Pandan\u202fGateway).",
+            "evidence": [
+              {
+                "source": "Monthly Status Report Feb 2026.pdf",
+                "citation": "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0004 | pages=1,2 | section=3. Package Progress Snapshot",
+                "snippet": "Viaduct Civil Works, Planned % = 42.0. Viaduct Civil Works, Actual % = 41.0. Viaduct Civil Works, Commentary = Weather reduced crane windows and pour productivity. Pandan Gateway Station Structural and Architectural, Planned % = 33.0. Pandan Gateway Station Structural and Architectural, Actual % = 32.0. Pandan Gateway Station Structural and Architectural, Commentary = Slightly behind but manageable Cheras North Station Structural and Architectural, Planned % = 29.0. Cheras North Station Structural and Architectural, Actual % = 25.0. Cheras North Station Structural and Architectural, Commentary = Utility conflict and redesign sequence delayed progress. Utilities Relocation, Planned % = 49.0. Utilities Relocation, Actual % = 43.0. Utilities Relocation, Commentary = Critical diversions remain incomplete. Systems Interface Design, Planned % = 57.0. Systems Interface Design, Actual % = 55.0. Systems Interface Design, Commentary = Partial approval only; phased submission made"
+              }
+            ]
+          }
+        ],
+        "insufficient_evidence": false
+      },
+      "data_findings": {
+        "findings": [],
+        "insufficient_evidence": false
+      },
+      "route_match": true,
+      "has_citations": true,
+      "has_retrieved_contexts": true,
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy"
+      ],
+      "metric_scores": {
+        "faithfulness": 0.8571,
+        "answer_relevancy": 0.82
+      },
+      "metric_errors": {},
+      "notes": [],
+      "duration_ms": 2976.75,
+      "expected_sources": [
+        "monthly_status_report_feb_2026.md"
+      ],
+      "expected_answer_points": [
+        "Identify Cheras North as worse",
+        "Include Pandan Gateway 33.0% planned versus 32.0% actual",
+        "Include Cheras North 29.0% planned versus 25.0% actual"
+      ],
+      "scope": "core",
+      "average_metric_score": 0.8385
+    },
+    {
+      "id": "TC-03",
+      "difficulty": "Medium",
+      "question": "What were the principal causes of delay at Cheras North by February 2026, and were they fully resolved by March 2026?",
+      "route_expectation": "hybrid",
+      "route": "document",
+      "runtime_success": true,
+      "error_type": null,
+      "error_detail": null,
+      "generated_answer": "**Principal causes of delay at Cheras\u202fNorth (February\u202f2026)**  \n- **Utility\u2011related conflicts** \u2013 Additional underground services were discovered, requiring redesign of the work sequence and tighter coordination with utility owners.  \n- **Adverse weather** \u2013 Heavy rainfall further slowed progress.  \n- **Diversion package bottleneck** \u2013 The authority requested extra method\u2011statement clarification for one crossing, delaying access to permanent works.  \n\n*(Sources: Monthly Status Report\u202fFeb\u202f2026 \u2013 sections\u202f4.2 and 1. Executive Summary; Monthly Status Report\u202fJan\u202f2026 \u2013 Utilities and Access)*\n\n**Status by March\u202f2026**  \n- The utility diversion for the Cheras\u202fNorth corridor had **not yet been fully secured**; the risk of further delay remained high.  \n- Schedule slippage widened from \u20131.3\u202f% at the end of February to \u20132.2\u202f% in mid\u2011March.  \n- Interface design freeze and other interface\u2011related delays were still unresolved.  \n\n*(Sources: Executive Steering Update\u202fMar\u202f2026 \u2013 sections\u202f3.1 \u201cWhat Changed Since February\u201d and\u202f4 \u201cPriority Risks\u201d)*\n\n**Conclusion**  \nThe main delays in February were driven by newly\u2011identified underground utilities, heavy rainfall, and a diversion\u2011package clarification request. By March, these issues had not been fully resolved; utility diversion approval was still pending and risk levels remained severe, indicating that the delays persisted into March.",
+      "retrieved_contexts": [
+        "Additional underground services were identified in the Cheras North corridor, requiring redesign of the immediate work sequence and closer coordination with utility owners. The site team expects diversion completion in M",
+        "Overall actual progress reached 34.2% against planned 35.5% . Status is now Amber/Red due to widening schedule drag at Cheras North Station , compounded by heavy rainfall, utility conflict escalation, and slower-than-pla",
+        "The diversion package at Cheras North Station did not progress at the planned rate because the authority requested additional method statement clarification for one crossing. This restricted access to the permanent works",
+        "- Schedule slippage widened from -1.3% at end-February to -2.2% in mid-March. - Utility diversion completion for the Cheras North corridor has not yet been fully secured. - Interface design freeze was not achieved in ful",
+        "Utility diversion approval delay, Current View = Severe. Utility diversion approval delay, Executive Note = Requires employer-level escalation with authority. Unidentified services in Cheras North corridor, Current View = High. Unidentified services in Cheras North corridor, Executive Note = Design and construction sequence remains constrained. Interface drawing approval lag, Current View = High. Interface drawing approval lag, Executive Note = Threatens downstream systems access and testing readiness. Precast supply bottleneck, Current View = Moderate. Precast supply bottleneck, Executive Note = Alternate source should be readied immediately. Pending VOs hardening into claims, Current View = Moderate. Pending VOs hardening into claims, Executive Note = Stronger instruction discipline required"
+      ],
+      "citations": [
+        "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0007 | pages=2 | section=4.2 Cheras North Utility Conflict",
+        "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0002 | pages=1 | section=1. Executive Summary",
+        "document=Monthly Status Report Jan 2026.pdf | chunk=d75a7ec8-a906-4582-a7fe-2a4b8cd11ca0_chunk_0007 | pages=2 | section=5.1 Utilities and Access",
+        "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0004 | pages=1 | section=3.1 What Changed Since February",
+        "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0006 | pages=2 | section=4. Priority Risks"
+      ],
+      "document_findings": {
+        "findings": [
+          {
+            "claim": "By February\u202f2026 the main reasons for delay at Cheras\u202fNorth Station were utility\u2011related conflicts \u2013 additional underground services were discovered requiring redesign and tighter coordination with owners \u2013 and adverse weather, with heavy rainfall further slowing work; the diversion package was also held up because the authority asked for extra method\u2011statement clarification for a crossing",
+            "evidence": [
+              {
+                "source": "Monthly Status Report Feb 2026.pdf",
+                "citation": "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0007 | pages=2 | section=4.2 Cheras North Utility Conflict",
+                "snippet": "Additional underground services were identified in the Cheras North corridor, requiring redesign of the immediate work sequence and closer coordination with utility owners. The site team expects diversion completion in M"
+              },
+              {
+                "source": "Monthly Status Report Feb 2026.pdf",
+                "citation": "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0002 | pages=1 | section=1. Executive Summary",
+                "snippet": "Overall actual progress reached 34.2% against planned 35.5% . Status is now Amber/Red due to widening schedule drag at Cheras North Station , compounded by heavy rainfall, utility conflict escalation, and slower-than-pla"
+              },
+              {
+                "source": "Monthly Status Report Jan 2026.pdf",
+                "citation": "document=Monthly Status Report Jan 2026.pdf | chunk=d75a7ec8-a906-4582-a7fe-2a4b8cd11ca0_chunk_0007 | pages=2 | section=5.1 Utilities and Access",
+                "snippet": "The diversion package at Cheras North Station did not progress at the planned rate because the authority requested additional method statement clarification for one crossing. This restricted access to the permanent works"
+              }
+            ]
+          },
+          {
+            "claim": "By the March\u202f2026 update the identified causes had not been fully resolved \u2013 utility diversion for the Cheras\u202fNorth corridor was still not completely secured and the utility\u2011conflict risk remained high, indicating the delays persisted into March",
+            "evidence": [
+              {
+                "source": "Executive Steering Update Mar 2026.pdf",
+                "citation": "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0004 | pages=1 | section=3.1 What Changed Since February",
+                "snippet": "- Schedule slippage widened from -1.3% at end-February to -2.2% in mid-March. - Utility diversion completion for the Cheras North corridor has not yet been fully secured. - Interface design freeze was not achieved in ful"
+              },
+              {
+                "source": "Executive Steering Update Mar 2026.pdf",
+                "citation": "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0006 | pages=2 | section=4. Priority Risks",
+                "snippet": "Utility diversion approval delay, Current View = Severe. Utility diversion approval delay, Executive Note = Requires employer-level escalation with authority. Unidentified services in Cheras North corridor, Current View = High. Unidentified services in Cheras North corridor, Executive Note = Design and construction sequence remains constrained. Interface drawing approval lag, Current View = High. Interface drawing approval lag, Executive Note = Threatens downstream systems access and testing readiness. Precast supply bottleneck, Current View = Moderate. Precast supply bottleneck, Executive Note = Alternate source should be readied immediately. Pending VOs hardening into claims, Current View = Moderate. Pending VOs hardening into claims, Executive Note = Stronger instruction discipline required"
+              }
+            ]
+          }
+        ],
+        "insufficient_evidence": false
+      },
+      "data_findings": {
+        "findings": [],
+        "insufficient_evidence": false
+      },
+      "route_match": false,
+      "has_citations": true,
+      "has_retrieved_contexts": true,
+      "primary_metrics": [
+        "faithfulness",
+        "context_precision",
+        "context_recall",
+        "answer_relevancy"
+      ],
+      "metric_scores": {
+        "faithfulness": 0.8889,
+        "context_precision": 0.8875,
+        "context_recall": 1.0,
+        "answer_relevancy": 0.9705
+      },
+      "metric_errors": {},
+      "notes": [],
+      "duration_ms": 6836.76,
+      "expected_sources": [
+        "monthly_status_report_jan_2026.md",
+        "monthly_status_report_feb_2026.md",
+        "executive_steering_update_mar_2026.md",
+        "risk_register_mar_2026.csv"
+      ],
+      "expected_answer_points": [
+        "Mention utility conflict or diversion issues",
+        "Mention unresolved authority clearance",
+        "Mention additional underground services",
+        "Mention redesign or sequence impacts",
+        "Conclude the issues were not fully resolved by March"
+      ],
+      "scope": "core",
+      "average_metric_score": 0.9367
+    },
+    {
+      "id": "TC-04",
+      "difficulty": "Medium",
+      "question": "Which commercial issues most threatened Package V3 by March 2026, and which references support that view?",
+      "route_expectation": "hybrid",
+      "route": "document",
+      "runtime_success": true,
+      "error_type": null,
+      "error_detail": null,
+      "generated_answer": "**Commercial issues most threatening Package\u202fV3 by March\u202f2026**\n\n- **Utilities\u2011related changes and the associated pending variation orders** \u2013 These were identified as the largest source of commercial movement and the main driver of cost growth.  \n- **Increase in recovery working hours** \u2013 This raised preliminaries and supervision costs, adding further commercial pressure.\n\n**Supporting references**\n\n- *Monthly Status Report\u202fFeb\u202f2026* \u2013 Commercial commentary notes that \u201cRecovery working hours are increasing preliminaries and supervision costs\u201d and that \u201cUtilities\u2011related changes remain the largest source of pending commercial movement\u201d (Source: Monthly Status Report Feb\u202f2026.pdf | chunk=e83fcd41\u2011aabc\u20114180\u2011bce1\u20118fa63b63a0de_chunk_0012 | pages=3).  \n- The same report\u2019s overall status dashboard highlights \u201cSchedule, Commentary = Slippage widened \u2026 especially at Cheras North and utilities\u201d and \u201cCost, Commentary = Forecast moved upward due to recovery measures and VO growth\u201d (Source: Monthly Status Report Feb\u202f2026.pdf | chunk=e83fcd41\u2011aabc\u20114180\u2011bce1\u20118fa63b63a0de_chunk_0003 | pages=1).  \n- The commercial summary shows the magnitude of pending variation orders: \u201cApproved VO to date: RM\u202f26\u202fmillion \u2013 Pending VO under review: RM\u202f35\u202fmillion\u201d (Source: Monthly Status Report Feb\u202f2026.pdf | chunk=e83fcd41\u2011aabc\u20114180\u2011bce1\u20118fa63b63a0de_chunk_0010 | pages=3).",
+      "retrieved_contexts": [
+        "- Recovery working hours are increasing preliminaries and supervision costs. - Utilities-related changes remain the largest source of pending commercial movement. - Some instructed work has not yet converted into approve",
+        "Schedule, Status = Red. Schedule, Commentary = Slippage widened in February, especially at Cheras North and utilities. Cost, Status = Amber. Cost, Commentary = Forecast moved upward due to recovery measures and VO growth. Safety, Status = Green. Safety, Commentary = No LTI; one near-miss follow-up remains active. Quality, Status = Amber. Quality, Commentary = Major concrete quality issues avoided, but one NCR closure still awaiting final verification. Stakeholders, Status = Amber. Stakeholders, Commentary = Utility and community constraints are restricting productivity windows",
+        "- Approved VO to date: RM 26 million - Pending VO under review: - RM 35 million - Actual cost to date: RM 452 million - Forecast at completion: RM 1.352 billion"
+      ],
+      "citations": [
+        "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0012 | pages=3 | section=Commercial commentary:",
+        "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0003 | pages=1 | section=2. Overall Status Dashboard",
+        "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0010 | pages=3 | section=6. Commercial Summary"
+      ],
+      "document_findings": {
+        "findings": [
+          {
+            "claim": "The most threatening commercial issues for Package V3 by March\u202f2026 were utilities\u2011related changes and associated pending variation orders, which were the largest source of commercial movement and drove cost growth, and the increase in recovery working hours that raised preliminaries and supervision costs.",
+            "evidence": [
+              {
+                "source": "Monthly Status Report Feb 2026.pdf",
+                "citation": "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0012 | pages=3 | section=Commercial commentary:",
+                "snippet": "- Recovery working hours are increasing preliminaries and supervision costs. - Utilities-related changes remain the largest source of pending commercial movement. - Some instructed work has not yet converted into approve"
+              },
+              {
+                "source": "Monthly Status Report Feb 2026.pdf",
+                "citation": "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0003 | pages=1 | section=2. Overall Status Dashboard",
+                "snippet": "Schedule, Status = Red. Schedule, Commentary = Slippage widened in February, especially at Cheras North and utilities. Cost, Status = Amber. Cost, Commentary = Forecast moved upward due to recovery measures and VO growth. Safety, Status = Green. Safety, Commentary = No LTI; one near-miss follow-up remains active. Quality, Status = Amber. Quality, Commentary = Major concrete quality issues avoided, but one NCR closure still awaiting final verification. Stakeholders, Status = Amber. Stakeholders, Commentary = Utility and community constraints are restricting productivity windows"
+              },
+              {
+                "source": "Monthly Status Report Feb 2026.pdf",
+                "citation": "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0010 | pages=3 | section=6. Commercial Summary",
+                "snippet": "- Approved VO to date: RM 26 million - Pending VO under review: - RM 35 million - Actual cost to date: RM 452 million - Forecast at completion: RM 1.352 billion"
+              }
+            ]
+          }
+        ],
+        "insufficient_evidence": false
+      },
+      "data_findings": {
+        "findings": [],
+        "insufficient_evidence": false
+      },
+      "route_match": false,
+      "has_citations": true,
+      "has_retrieved_contexts": true,
+      "primary_metrics": [
+        "faithfulness",
+        "context_precision",
+        "answer_relevancy"
+      ],
+      "metric_scores": {
+        "faithfulness": 0.3333,
+        "context_precision": 1.0,
+        "answer_relevancy": 0.9774
+      },
+      "metric_errors": {},
+      "notes": [],
+      "duration_ms": 6635.62,
+      "expected_sources": [
+        "executive_steering_update_mar_2026.md",
+        "financial_summary_mar_2026.csv",
+        "risk_register_mar_2026.csv"
+      ],
+      "expected_answer_points": [
+        "Mention Cheras North redesign or sequence disruption",
+        "Mention utility-related changes or protection measures",
+        "Mention extended preliminaries or recovery working windows",
+        "Mention prolonged interface coordination",
+        "Reference VO-019, VO-020, or VO-021 and March finance or executive update support"
+      ],
+      "scope": "core",
+      "average_metric_score": 0.7702
+    },
+    {
+      "id": "TC-05",
+      "difficulty": "Hard",
+      "question": "How did the outlook for Cheras North utility diversion change between February and March 2026?",
+      "route_expectation": "hybrid",
+      "route": "document",
+      "runtime_success": true,
+      "error_type": null,
+      "error_detail": null,
+      "generated_answer": "**Outlook change (Feb\u202f\u2192\u202fMar\u202f2026)**  \n- **February 2026**: The site team expected the Cheras North utility diversion to be finished in **March 2026** (baseline completion date).  \n- **March 2026**: The forecast slipped to **18\u202fApril\u202f2026**, and the diversion was still not fully secured, indicating a deterioration in the schedule.  \n\n**Key points**  \n- Baseline: 31\u202fMar\u202f2026 \u2192 Latest forecast: 18\u202fApr\u202f2026 (slip of ~18\u202fdays).  \n- Schedule slippage widened from \u20131.3\u202f% at end\u2011February to \u20132.2\u202f% in mid\u2011March.  \n- The March update explicitly noted that the diversion had not yet been fully secured, reflecting a negative shift compared with February.  \n\n(References: Monthly Status Report Feb\u202f2026; Executive Steering Update Mar\u202f2026)",
+      "retrieved_contexts": [
+        "Additional underground services were identified in the Cheras North corridor, requiring redesign of the immediate work sequence and closer coordination with utility owners. The site team expects diversion completion in M",
+        "MS-05, Description = Cheras North utility diversion complete. MS-05, Baseline = 31 Mar 2026. MS-05, Latest Forecast = 18 Apr 2026. MS-05, Note = Dependent on unresolved approval and service conflict. MS-06, Description = Systems interface design freeze. MS-06, Baseline = 31 Mar 2026. MS-06, Latest Forecast = 22 Apr 2026. MS-06, Note = Partial approvals only as of 20 Mar 2026",
+        "- Schedule slippage widened from -1.3% at end-February to -2.2% in mid-March. - Utility diversion completion for the Cheras North corridor has not yet been fully secured. - Interface design freeze was not achieved in ful"
+      ],
+      "citations": [
+        "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0007 | pages=2 | section=4.2 Cheras North Utility Conflict",
+        "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0007 | pages=2 | section=4A. Milestone Outlook",
+        "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0004 | pages=1 | section=3.1 What Changed Since February"
+      ],
+      "document_findings": {
+        "findings": [
+          {
+            "claim": "The February 2026 Monthly Status Report indicated that the site team expected the Cheras North utility diversion to be completed in March.",
+            "evidence": [
+              {
+                "source": "Monthly Status Report Feb 2026.pdf",
+                "citation": "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0007 | pages=2 | section=4.2 Cheras North Utility Conflict",
+                "snippet": "Additional underground services were identified in the Cheras North corridor, requiring redesign of the immediate work sequence and closer coordination with utility owners. The site team expects diversion completion in M"
+              }
+            ]
+          },
+          {
+            "claim": "The March 2026 Executive Steering Update showed the forecast for the Cheras North utility diversion slipping from the baseline completion date of 31\u202fMar\u202f2026 to a latest forecast of 18\u202fApr\u202f2026, noting dependence on unresolved approvals and service conflict.",
+            "evidence": [
+              {
+                "source": "Executive Steering Update Mar 2026.pdf",
+                "citation": "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0007 | pages=2 | section=4A. Milestone Outlook",
+                "snippet": "MS-05, Description = Cheras North utility diversion complete. MS-05, Baseline = 31 Mar 2026. MS-05, Latest Forecast = 18 Apr 2026. MS-05, Note = Dependent on unresolved approval and service conflict. MS-06, Description = Systems interface design freeze. MS-06, Baseline = 31 Mar 2026. MS-06, Latest Forecast = 22 Apr 2026. MS-06, Note = Partial approvals only as of 20 Mar 2026"
+              }
+            ]
+          },
+          {
+            "claim": "The March 2026 update also stated that the utility diversion completion for the Cheras North corridor had not yet been fully secured, reflecting a deterioration in outlook compared with February.",
+            "evidence": [
+              {
+                "source": "Executive Steering Update Mar 2026.pdf",
+                "citation": "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0004 | pages=1 | section=3.1 What Changed Since February",
+                "snippet": "- Schedule slippage widened from -1.3% at end-February to -2.2% in mid-March. - Utility diversion completion for the Cheras North corridor has not yet been fully secured. - Interface design freeze was not achieved in ful"
+              }
+            ]
+          }
+        ],
+        "insufficient_evidence": false
+      },
+      "data_findings": {
+        "findings": [],
+        "insufficient_evidence": false
+      },
+      "route_match": false,
+      "has_citations": true,
+      "has_retrieved_contexts": true,
+      "primary_metrics": [
+        "faithfulness",
+        "context_recall",
+        "answer_correctness"
+      ],
+      "metric_scores": {
+        "faithfulness": 1.0,
+        "context_recall": 1.0,
+        "answer_correctness": null
+      },
+      "metric_errors": {
+        "answer_correctness": "RAGAS returned no numeric score."
+      },
+      "notes": [],
+      "duration_ms": 15555.7,
+      "expected_sources": [
+        "monthly_status_report_feb_2026.md",
+        "executive_steering_update_mar_2026.md",
+        "risk_register_mar_2026.csv"
+      ],
+      "expected_answer_points": [
+        "State that February still expected March completion",
+        "State that the March update moved the forecast to 18 Apr 2026",
+        "Frame the change as a deterioration in outlook"
+      ],
+      "scope": "core",
+      "average_metric_score": 1.0
+    },
+    {
+      "id": "TC-06",
+      "difficulty": "Hard",
+      "question": "Why is Package V3 considered delivery-sensitive within the East Metro programme, and which downstream programme activities are most exposed if it slips further?",
+      "route_expectation": "document",
+      "route": "document",
+      "runtime_success": true,
+      "error_type": null,
+      "error_detail": null,
+      "generated_answer": "**Why Package\u202fV3 is delivery\u2011sensitive**\n\n- It is constrained by **material limits**:  \n  - *Limited night\u2011working windows* at selected junctions.  \n  - *Congested utility corridors* near Cheras North Station.  \n  - *Phased traffic\u2011diversion* requirements at Pandan Gat. (Source: *Package\u202fV3 Brief.pdf*, section\u202f4)  \n- Its **baseline risk profile** adds further sensitivity:  \n  - *Utility\u2011authority approvals* and access restrictions.  \n  - *Unknown underground services* and incomplete as\u2011built records.  \n  - *Traffic\u2011management constraints* in dense urban corridors. (Source: *Package\u202fV3 Brief.pdf*, section\u202f8)\n\nThese constraints limit schedule flexibility and increase the likelihood of delays, making the package highly delivery\u2011sensitive.\n\n**Downstream activities most exposed if V3 slips**\n\n- The **systems\u2011interface access** and **testing\u2011readiness** phases are the most vulnerable.  \n  - The *interface drawing approval lag* is flagged as a high\u2011risk factor that threatens downstream systems access and testing readiness. (Source: *Executive Steering Update Mar\u202f2026.pdf*, section\u202f4)\n\nThus, any further delay in Package\u202fV3 would most critically impact the interface approval, systems access, and subsequent testing readiness of the East Metro programme.",
+      "retrieved_contexts": [
+        "The package is governed by several material constraints: - limited night working windows at selected junctions - congested utility corridors near Cheras North Station - phased traffic diversion requirements at Pandan Gat",
+        "The baseline risk profile for Package V3 includes: - utility authority approvals and access restrictions - unknown underground services and incomplete as-built records - traffic management constraints in dense urban corr",
+        "Utility diversion approval delay, Current View = Severe. Utility diversion approval delay, Executive Note = Requires employer-level escalation with authority. Unidentified services in Cheras North corridor, Current View = High. Unidentified services in Cheras North corridor, Executive Note = Design and construction sequence remains constrained. Interface drawing approval lag, Current View = High. Interface drawing approval lag, Executive Note = Threatens downstream systems access and testing readiness. Precast supply bottleneck, Current View = Moderate. Precast supply bottleneck, Executive Note = Alternate source should be readied immediately. Pending VOs hardening into claims, Current View = Moderate. Pending VOs hardening into claims, Executive Note = Stronger instruction discipline required"
+      ],
+      "citations": [
+        "document=Package V3 Brief.pdf | chunk=7252634e-eb8d-4eac-a0b7-a34e3d5ca63f_chunk_0004 | pages=2 | section=4. Delivery Constraints",
+        "document=Package V3 Brief.pdf | chunk=7252634e-eb8d-4eac-a0b7-a34e3d5ca63f_chunk_0010 | pages=4 | section=8. Baseline Risk Themes",
+        "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0006 | pages=2 | section=4. Priority Risks"
+      ],
+      "document_findings": {
+        "findings": [
+          {
+            "claim": "Package V3 is considered delivery\u2011sensitive because it is governed by material constraints such as limited night\u2011working windows at selected junctions, congested utility corridors near Cheras North Station, and phased traffic\u2011diversion requirements",
+            "evidence": [
+              {
+                "source": "Package V3 Brief.pdf",
+                "citation": "document=Package V3 Brief.pdf | chunk=7252634e-eb8d-4eac-a0b7-a34e3d5ca63f_chunk_0004 | pages=2 | section=4. Delivery Constraints",
+                "snippet": "The package is governed by several material constraints: - limited night working windows at selected junctions - congested utility corridors near Cheras North Station - phased traffic diversion requirements at Pandan Gat"
+              }
+            ]
+          },
+          {
+            "claim": "The package\u2019s baseline risk profile further underscores its delivery sensitivity, highlighting utility\u2011authority approvals, unknown underground services and traffic\u2011management constraints that limit schedule flexibility",
+            "evidence": [
+              {
+                "source": "Package V3 Brief.pdf",
+                "citation": "document=Package V3 Brief.pdf | chunk=7252634e-eb8d-4eac-a0b7-a34e3d5ca63f_chunk_0010 | pages=4 | section=8. Baseline Risk Themes",
+                "snippet": "The baseline risk profile for Package V3 includes: - utility authority approvals and access restrictions - unknown underground services and incomplete as-built records - traffic management constraints in dense urban corr"
+              }
+            ]
+          },
+          {
+            "claim": "If Package V3 slips further, the downstream programme activities most exposed are the systems\u2011interface access and testing\u2011readiness phases, as the interface\u2011drawing approval lag is flagged as a risk that threatens downstream systems access and testing readiness",
+            "evidence": [
+              {
+                "source": "Executive Steering Update Mar 2026.pdf",
+                "citation": "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0006 | pages=2 | section=4. Priority Risks",
+                "snippet": "Utility diversion approval delay, Current View = Severe. Utility diversion approval delay, Executive Note = Requires employer-level escalation with authority. Unidentified services in Cheras North corridor, Current View = High. Unidentified services in Cheras North corridor, Executive Note = Design and construction sequence remains constrained. Interface drawing approval lag, Current View = High. Interface drawing approval lag, Executive Note = Threatens downstream systems access and testing readiness. Precast supply bottleneck, Current View = Moderate. Precast supply bottleneck, Executive Note = Alternate source should be readied immediately. Pending VOs hardening into claims, Current View = Moderate. Pending VOs hardening into claims, Executive Note = Stronger instruction discipline required"
+              }
+            ]
+          }
+        ],
+        "insufficient_evidence": false
+      },
+      "data_findings": {
+        "findings": [],
+        "insufficient_evidence": false
+      },
+      "route_match": true,
+      "has_citations": true,
+      "has_retrieved_contexts": true,
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy",
+        "context_recall"
+      ],
+      "metric_scores": {
+        "faithfulness": 0.6154,
+        "answer_relevancy": null,
+        "context_recall": 0.0
+      },
+      "metric_errors": {
+        "answer_relevancy": "RAGAS returned no numeric score."
+      },
+      "notes": [],
+      "duration_ms": 13901.88,
+      "expected_sources": [
+        "PROGRAMME_BRIEF.md",
+        "PACKAGE_V3_BRIEF.md",
+        "executive_steering_update_mar_2026.md"
+      ],
+      "expected_answer_points": [
+        "Explain why Package V3 is programme-sensitive beyond just local delay",
+        "Mention constrained traffic, utility, or interface conditions",
+        "Mention systems design freeze or interface readiness",
+        "Mention access handover, installation readiness, or later integration impacts"
+      ],
+      "scope": "core",
+      "average_metric_score": 0.3077
+    },
+    {
+      "id": "TC-07",
+      "difficulty": "Adversarial",
+      "question": "Has NCR-014 been fully closed?",
+      "route_expectation": "hybrid",
+      "route": "document",
+      "runtime_success": true,
+      "error_type": null,
+      "error_detail": null,
+      "generated_answer": "**Answer:**  \nNo \u2013 NCR\u2011014 has not yet been fully closed. The site team reported it as closed, but independent QA verification and final reconciliation of close\u2011out records are still pending.\n\n**Supporting evidence**\n\n- The *Monthly Status Report Jan\u202f2026* notes that the site completed corrective work and expects closure in February after QAQC verification. (Source: Monthly Status Report Jan\u202f2026.pdf | chunk=d75a7ec8-a906-4582-a7fe-2a4b8cd11ca0_chunk_0008 | pages=2 | section=5.2 Quality)  \n- The *Executive Steering Update Mar\u202f2026* states that quality close\u2011out records for NCR\u2011014 are still being reconciled between site and QA logs. (Source: Executive Steering Update Mar\u202f2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0013 | pages=3 | section=8. Notes)  \n- The *Monthly Status Report Feb\u202f2026* confirms that the site reported NCR\u2011014 as closed, but independent closure verification remains pending. (Source: Monthly Status Report Feb\u202f2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0013 | pages=3 | section=7. Safety and Quality)  \n- The same report lists open actions specifically for NCR\u2011014, including confirming independent QA verification. (Source: Monthly Status Report Feb\u202f2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0014 | pages=3 | section=Open action references)\n\nThus, based on the available documents, NCR\u2011014 remains partially open until the pending verification and reconciliation are completed.",
+      "retrieved_contexts": [
+        "NCR-014 was raised following a pier reinforcement alignment discrepancy. The site team completed immediate corrective work and expects closure in February after QAQC verification.",
+        "- Quality closeout records for NCR-014 are still being reconciled between site and QA logs.",
+        "- No lost-time injury recorded in February. - One lifting near-miss action plan is being tracked to closure. - NCR-014 was reported by site as closed; independent closure verification remains pending at the time of this",
+        "- ACT-033 : Confirm independent QA verification for NCR-014 - ACT-041 : Close authority comments on telecom crossing method statement - ACT-044 : Validate supplier recovery plan for precast mould availability - ACT-052 :"
+      ],
+      "citations": [
+        "document=Monthly Status Report Jan 2026.pdf | chunk=d75a7ec8-a906-4582-a7fe-2a4b8cd11ca0_chunk_0008 | pages=2 | section=5.2 Quality",
+        "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0013 | pages=3 | section=8. Notes",
+        "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0013 | pages=3 | section=7. Safety and Quality",
+        "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0014 | pages=3 | section=Open action references:"
+      ],
+      "document_findings": {
+        "findings": [
+          {
+            "claim": "NCR-014 has not been fully closed; the site team reported it as closed but independent QA verification and final reconciliation of closeout records were still pending.",
+            "evidence": [
+              {
+                "source": "Monthly Status Report Jan 2026.pdf",
+                "citation": "document=Monthly Status Report Jan 2026.pdf | chunk=d75a7ec8-a906-4582-a7fe-2a4b8cd11ca0_chunk_0008 | pages=2 | section=5.2 Quality",
+                "snippet": "NCR-014 was raised following a pier reinforcement alignment discrepancy. The site team completed immediate corrective work and expects closure in February after QAQC verification."
+              },
+              {
+                "source": "Executive Steering Update Mar 2026.pdf",
+                "citation": "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0013 | pages=3 | section=8. Notes",
+                "snippet": "- Quality closeout records for NCR-014 are still being reconciled between site and QA logs."
+              },
+              {
+                "source": "Monthly Status Report Feb 2026.pdf",
+                "citation": "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0013 | pages=3 | section=7. Safety and Quality",
+                "snippet": "- No lost-time injury recorded in February. - One lifting near-miss action plan is being tracked to closure. - NCR-014 was reported by site as closed; independent closure verification remains pending at the time of this"
+              },
+              {
+                "source": "Monthly Status Report Feb 2026.pdf",
+                "citation": "document=Monthly Status Report Feb 2026.pdf | chunk=e83fcd41-aabc-4180-bce1-8fa63b63a0de_chunk_0014 | pages=3 | section=Open action references:",
+                "snippet": "- ACT-033 : Confirm independent QA verification for NCR-014 - ACT-041 : Close authority comments on telecom crossing method statement - ACT-044 : Validate supplier recovery plan for precast mould availability - ACT-052 :"
+              }
+            ]
+          }
+        ],
+        "insufficient_evidence": false
+      },
+      "data_findings": {
+        "findings": [],
+        "insufficient_evidence": false
+      },
+      "route_match": false,
+      "has_citations": true,
+      "has_retrieved_contexts": true,
+      "primary_metrics": [
+        "faithfulness",
+        "answer_correctness"
+      ],
+      "metric_scores": {
+        "faithfulness": 0.5,
+        "answer_correctness": null
+      },
+      "metric_errors": {
+        "answer_correctness": "RAGAS returned no numeric score."
+      },
+      "notes": [],
+      "duration_ms": 5470.78,
+      "expected_sources": [
+        "monthly_status_report_jan_2026.md",
+        "monthly_status_report_feb_2026.md",
+        "risk_register_mar_2026.csv",
+        "executive_steering_update_mar_2026.md"
+      ],
+      "expected_answer_points": [
+        "Answer no or not fully verified",
+        "Distinguish site closure from independent verification",
+        "Mention later reconciliation or pending verification"
+      ],
+      "scope": "core",
+      "average_metric_score": 0.5
+    },
+    {
+      "id": "TC-08",
+      "difficulty": "Adversarial",
+      "question": "Was the systems interface design freeze achieved by the end of March 2026?",
+      "route_expectation": "document",
+      "route": "document",
+      "runtime_success": true,
+      "error_type": null,
+      "error_detail": null,
+      "generated_answer": "**Answer:**  \nNo \u2013 the systems interface design freeze was not achieved by the end of March\u202f2026.  \n\n- The Executive Steering Update (Mar\u202f2026) lists MS\u201106 \u201cSystems interface design freeze\u201d with a baseline of\u202f31\u202fMar\u202f2026 but a latest forecast of\u202f22\u202fApr\u202f2026, noting that only partial approvals were in place as of\u202f20\u202fMar\u202f2026 (Source: Executive Steering Update Mar\u202f2026.pdf | chunk=8ff5e30f\u20115f90\u20114c6c\u20119149\u2011fdd315ee431a_chunk_0007 | pages=2 | section=4A. Milestone Outlook).  \n- The same update explicitly states that the interface design freeze was not achieved by the end of March (Source: Executive Steering Update Mar\u202f2026.pdf | chunk=8ff5e30f\u20115f90\u20114c6c\u20119149\u2011fdd315ee431a_chunk_0004 | pages=1 | section=3.1 What Changed Since February).  \n\nNo data findings contradict this, and there is no evidence suggesting the milestone was met.",
+      "retrieved_contexts": [
+        "MS-05, Description = Cheras North utility diversion complete. MS-05, Baseline = 31 Mar 2026. MS-05, Latest Forecast = 18 Apr 2026. MS-05, Note = Dependent on unresolved approval and service conflict. MS-06, Description = Systems interface design freeze. MS-06, Baseline = 31 Mar 2026. MS-06, Latest Forecast = 22 Apr 2026. MS-06, Note = Partial approvals only as of 20 Mar 2026",
+        "- Schedule slippage widened from -1.3% at end-February to -2.2% in mid-March. - Utility diversion completion for the Cheras North corridor has not yet been fully secured. - Interface design freeze was not achieved in ful"
+      ],
+      "citations": [
+        "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0007 | pages=2 | section=4A. Milestone Outlook",
+        "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0004 | pages=1 | section=3.1 What Changed Since February"
+      ],
+      "document_findings": {
+        "findings": [
+          {
+            "claim": "The systems interface design freeze was not achieved by the end of March 2026.",
+            "evidence": [
+              {
+                "source": "Executive Steering Update Mar 2026.pdf",
+                "citation": "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0007 | pages=2 | section=4A. Milestone Outlook",
+                "snippet": "MS-05, Description = Cheras North utility diversion complete. MS-05, Baseline = 31 Mar 2026. MS-05, Latest Forecast = 18 Apr 2026. MS-05, Note = Dependent on unresolved approval and service conflict. MS-06, Description = Systems interface design freeze. MS-06, Baseline = 31 Mar 2026. MS-06, Latest Forecast = 22 Apr 2026. MS-06, Note = Partial approvals only as of 20 Mar 2026"
+              },
+              {
+                "source": "Executive Steering Update Mar 2026.pdf",
+                "citation": "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0004 | pages=1 | section=3.1 What Changed Since February",
+                "snippet": "- Schedule slippage widened from -1.3% at end-February to -2.2% in mid-March. - Utility diversion completion for the Cheras North corridor has not yet been fully secured. - Interface design freeze was not achieved in ful"
+              }
+            ]
+          }
+        ],
+        "insufficient_evidence": false
+      },
+      "data_findings": {
+        "findings": [],
+        "insufficient_evidence": false
+      },
+      "route_match": true,
+      "has_citations": true,
+      "has_retrieved_contexts": true,
+      "primary_metrics": [
+        "faithfulness",
+        "answer_correctness",
+        "answer_relevancy"
+      ],
+      "metric_scores": {
+        "faithfulness": null,
+        "answer_correctness": null,
+        "answer_relevancy": 1.0
+      },
+      "metric_errors": {
+        "faithfulness": "RAGAS returned no numeric score.",
+        "answer_correctness": "RAGAS returned no numeric score."
+      },
+      "notes": [],
+      "duration_ms": 5221.89,
+      "expected_sources": [
+        "PACKAGE_V3_BRIEF.md",
+        "monthly_status_report_jan_2026.md",
+        "monthly_status_report_feb_2026.md",
+        "executive_steering_update_mar_2026.md"
+      ],
+      "expected_answer_points": [
+        "Answer no",
+        "Mention the baseline target of 31 Mar 2026",
+        "Mention the forecast moved to 22 Apr 2026",
+        "Distinguish target versus actual status"
+      ],
+      "scope": "core",
+      "average_metric_score": 1.0
+    },
+    {
+      "id": "TC-09",
+      "difficulty": "Easy",
+      "question": "Which work package had the largest pending variation order exposure in the March financial dataset, and what was the primary VO reference?",
+      "route_expectation": "data",
+      "route": "data",
+      "runtime_success": true,
+      "error_type": null,
+      "error_detail": null,
+      "generated_answer": "**Answer**\n\n- The work package with the largest pending variation order exposure in the March financial dataset is **Cheras North Station Structural and Architectural**.  \n- Its primary VO reference is **VO\u2011021**.  \n\n(Source: financial_summary_mar_2026.csv \u2013 query result showing `work_package: \"Cheras North Station Structural and Architectural\", pending_vo_rm_m: 12, primary_vo_ref: \"VO-021\"`)",
+      "retrieved_contexts": [
+        "Query on dataset financial_summary_mar_2026 from financial_summary_mar_2026.csv returned 1 row(s) after filters []. Top row: {\"work_package\": \"Cheras North Station Structural and Architectural\", \"pending_vo_rm_m\": 12, \"primary_vo_ref\": \"VO-021\"}"
+      ],
+      "citations": [
+        "dataset=b3e39c26-f896-42e1-97dd-b4784990e9c5:financial_summary_mar_2026 | query_id=query_001 | filters=[] | aggregations=[] | group_by=[]"
+      ],
+      "document_findings": {
+        "findings": [],
+        "insufficient_evidence": false
+      },
+      "data_findings": {
+        "findings": [
+          {
+            "claim": "The work package with the largest pending variation order exposure in the March financial dataset is Cheras North Station Structural and Architectural, and its primary VO reference is VO-021.",
+            "evidence": [
+              {
+                "source": "financial_summary_mar_2026.csv",
+                "citation": "dataset=b3e39c26-f896-42e1-97dd-b4784990e9c5:financial_summary_mar_2026 | query_id=query_001 | filters=[] | aggregations=[] | group_by=[]",
+                "snippet": "Query on dataset financial_summary_mar_2026 from financial_summary_mar_2026.csv returned 1 row(s) after filters []. Top row: {\"work_package\": \"Cheras North Station Structural and Architectural\", \"pending_vo_rm_m\": 12, \"primary_vo_ref\": \"VO-021\"}"
+              }
+            ]
+          }
+        ],
+        "insufficient_evidence": false
+      },
+      "route_match": true,
+      "has_citations": true,
+      "has_retrieved_contexts": true,
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy",
+        "answer_correctness"
+      ],
+      "metric_scores": {
+        "faithfulness": 0.75,
+        "answer_relevancy": 0.9804,
+        "answer_correctness": null
+      },
+      "metric_errors": {
+        "answer_correctness": "RAGAS returned no numeric score."
+      },
+      "notes": [],
+      "duration_ms": 3397.69,
+      "expected_sources": [
+        "financial_summary_mar_2026.csv"
+      ],
+      "expected_answer_points": [
+        "Identify Cheras North Station Structural and Architectural",
+        "Include RM 12 million pending VO exposure",
+        "Include VO-021",
+        "Make clear the answer comes from the structured March financial dataset"
+      ],
+      "scope": "extended",
+      "average_metric_score": 0.8652
+    },
+    {
+      "id": "TC-10",
+      "difficulty": "Medium",
+      "question": "Which March work packages were 5.0 percentage points or more behind planned progress, ranked from worst to less severe?",
+      "route_expectation": "data",
+      "route": "data",
+      "runtime_success": true,
+      "error_type": null,
+      "error_detail": null,
+      "generated_answer": "**March work packages that were \u2265\u202f5.0\u202fpercentage points behind planned progress (worst to least severe):**\n\n- **Utilities Relocation** \u2013 schedule variance **\u201112.0\u202fpts**  \n- **Cheras North Station Structural and Architectural** \u2013 schedule variance **\u20115.5\u202fpts**  \n- **Systems Interface and Design Coordination** \u2013 schedule variance **\u20115.0\u202fpts**  \n\nThese figures come from the March financial summary dataset, filtered for schedule variances of\u202f\u20115\u202fpts or worse (Source: `financial_summary_mar_2026.csv` \u2013 query result showing the three work packages).",
+      "retrieved_contexts": [
+        "Query on dataset financial_summary_mar_2026 from financial_summary_mar_2026.csv returned 3 row(s) after filters [{\"column\": \"schedule_variance_pct\", \"op\": \"<=\", \"value\": -5}]. Top row: {\"work_package\": \"Utilities Relocation\", \"planned_progress_pct\": 60, \"actual_progress_pct\": 48.0, \"schedule_variance_pct\": -12.0}"
+      ],
+      "citations": [
+        "dataset=b3e39c26-f896-42e1-97dd-b4784990e9c5:financial_summary_mar_2026 | query_id=query_001 | filters=[{\"column\": \"schedule_variance_pct\", \"op\": \"<=\", \"value\": -5}] | aggregations=[] | group_by=[]"
+      ],
+      "document_findings": {
+        "findings": [],
+        "insufficient_evidence": false
+      },
+      "data_findings": {
+        "findings": [
+          {
+            "claim": "The March work packages that were 5.0 percentage points or more behind planned progress, ranked from worst to less severe, are: Utilities Relocation (schedule variance -12.0\u202fpts), Cheras North Station Structural and Architectural (schedule variance -5.5\u202fpts), Systems Interface and Design Coordination (schedule variance -5.0\u202fpts).",
+            "evidence": [
+              {
+                "source": "financial_summary_mar_2026.csv",
+                "citation": "dataset=b3e39c26-f896-42e1-97dd-b4784990e9c5:financial_summary_mar_2026 | query_id=query_001 | filters=[{\"column\": \"schedule_variance_pct\", \"op\": \"<=\", \"value\": -5}] | aggregations=[] | group_by=[]",
+                "snippet": "Query on dataset financial_summary_mar_2026 from financial_summary_mar_2026.csv returned 3 row(s) after filters [{\"column\": \"schedule_variance_pct\", \"op\": \"<=\", \"value\": -5}]. Top row: {\"work_package\": \"Utilities Relocation\", \"planned_progress_pct\": 60, \"actual_progress_pct\": 48.0, \"schedule_variance_pct\": -12.0}"
+              }
+            ]
+          }
+        ],
+        "insufficient_evidence": false
+      },
+      "route_match": true,
+      "has_citations": true,
+      "has_retrieved_contexts": true,
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy",
+        "answer_correctness"
+      ],
+      "metric_scores": {
+        "faithfulness": 0.625,
+        "answer_relevancy": 0.9123,
+        "answer_correctness": null
+      },
+      "metric_errors": {
+        "answer_correctness": "RAGAS returned no numeric score."
+      },
+      "notes": [],
+      "duration_ms": 4810.84,
+      "expected_sources": [
+        "financial_summary_mar_2026.csv"
+      ],
+      "expected_answer_points": [
+        "Return a ranked list rather than a vague summary",
+        "Include Utilities Relocation at -12.0%",
+        "Include Cheras North Station Structural and Architectural at -5.5%",
+        "Include Systems Interface and Design Coordination at -5.0%"
+      ],
+      "scope": "extended",
+      "average_metric_score": 0.7687
+    },
+    {
+      "id": "TC-11",
+      "difficulty": "Medium",
+      "question": "Which risks were in Escalated status in the March risk register, and what were their risk scores and escalation levels?",
+      "route_expectation": "data",
+      "route": "document",
+      "runtime_success": true,
+      "error_type": null,
+      "error_detail": null,
+      "generated_answer": "I found insufficient evidence to answer your question from the available documents and datasets.",
+      "retrieved_contexts": [],
+      "citations": [],
+      "document_findings": {
+        "findings": [],
+        "insufficient_evidence": true
+      },
+      "data_findings": {
+        "findings": [],
+        "insufficient_evidence": false
+      },
+      "route_match": false,
+      "has_citations": false,
+      "has_retrieved_contexts": false,
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy",
+        "answer_correctness"
+      ],
+      "metric_scores": {},
+      "metric_errors": {
+        "ragas": "Skipped because retrieved_contexts is empty."
+      },
+      "notes": [],
+      "duration_ms": 8745.57,
+      "expected_sources": [
+        "risk_register_mar_2026.csv"
+      ],
+      "expected_answer_points": [
+        "Identify R-001",
+        "Include risk score 25 and escalation level Employer for R-001",
+        "Identify R-014",
+        "Include risk score 20 and escalation level Steering Committee for R-014"
+      ],
+      "scope": "extended",
+      "average_metric_score": null
+    },
+    {
+      "id": "TC-12",
+      "difficulty": "Hard",
+      "question": "Which work package carries the highest total risk score in the March risk register, and does that match the work package with the worst schedule variance in the March financial summary?",
+      "route_expectation": "data",
+      "route": "hybrid",
+      "runtime_success": true,
+      "error_type": null,
+      "error_detail": null,
+      "generated_answer": "**Answer**\n\n- The work package with the highest total risk score in the March risk register is **Viaduct\u202fCivil\u202fWorks** (total risk score\u202f51).  \n- The work package with the worst (most negative) schedule variance in the March financial summary is **Utilities\u202fRelocation** (\u201112\u202f%).  \n- Therefore, the two work packages do **not** match.\n\n**Evidence**\n\n- Highest risk score:  \n  - Query on `risk_register_mar_2026.csv` shows Viaduct Civil Works with a total risk score of 51. (Source: risk_register_mar_2026.csv; query_id=query_001)  \n- Worst schedule variance:  \n  - Query on `financial_summary_mar_2026.csv` shows Utilities Relocation with a schedule variance of \u201112.0\u202f%. (Source: financial_summary_mar_2026.csv; query_id=query_002)",
+      "retrieved_contexts": [
+        "Query on dataset risk_register_mar_2026 from risk_register_mar_2026.csv returned 1 row(s) after filters [] with aggregations [{\"column\": \"risk_score\", \"fn\": \"sum\", \"as\": \"total_risk_score\"}] and group_by ['linked_work_package']. Top row: {\"linked_work_package\": \"Viaduct Civil Works\", \"total_risk_score\": 51}",
+        "Query on dataset financial_summary_mar_2026 from financial_summary_mar_2026.csv returned 1 row(s) after filters []. Top row: {\"work_package\": \"Utilities Relocation\", \"schedule_variance_pct\": -12.0}"
+      ],
+      "citations": [
+        "dataset=98ed9793-4561-41d9-87ce-31409166f99c:risk_register_mar_2026 | query_id=query_001 | filters=[] | aggregations=[{\"column\": \"risk_score\", \"fn\": \"sum\", \"as\": \"total_risk_score\"}] | group_by=[\"linked_work_package\"]",
+        "dataset=b3e39c26-f896-42e1-97dd-b4784990e9c5:financial_summary_mar_2026 | query_id=query_002 | filters=[] | aggregations=[] | group_by=[]"
+      ],
+      "document_findings": {
+        "findings": [],
+        "insufficient_evidence": true
+      },
+      "data_findings": {
+        "findings": [
+          {
+            "claim": "The work package with the highest total risk score in the March risk register is Viaduct Civil Works (total risk score 51).",
+            "evidence": [
+              {
+                "source": "risk_register_mar_2026.csv",
+                "citation": "dataset=98ed9793-4561-41d9-87ce-31409166f99c:risk_register_mar_2026 | query_id=query_001 | filters=[] | aggregations=[{\"column\": \"risk_score\", \"fn\": \"sum\", \"as\": \"total_risk_score\"}] | group_by=[\"linked_work_package\"]",
+                "snippet": "Query on dataset risk_register_mar_2026 from risk_register_mar_2026.csv returned 1 row(s) after filters [] with aggregations [{\"column\": \"risk_score\", \"fn\": \"sum\", \"as\": \"total_risk_score\"}] and group_by ['linked_work_package']. Top row: {\"linked_work_package\": \"Viaduct Civil Works\", \"total_risk_score\": 51}"
+              }
+            ]
+          },
+          {
+            "claim": "The work package with the worst (most negative) schedule variance in the March financial summary is Utilities Relocation (schedule variance -12.0%).",
+            "evidence": [
+              {
+                "source": "financial_summary_mar_2026.csv",
+                "citation": "dataset=b3e39c26-f896-42e1-97dd-b4784990e9c5:financial_summary_mar_2026 | query_id=query_002 | filters=[] | aggregations=[] | group_by=[]",
+                "snippet": "Query on dataset financial_summary_mar_2026 from financial_summary_mar_2026.csv returned 1 row(s) after filters []. Top row: {\"work_package\": \"Utilities Relocation\", \"schedule_variance_pct\": -12.0}"
+              }
+            ]
+          }
+        ],
+        "insufficient_evidence": false
+      },
+      "route_match": false,
+      "has_citations": true,
+      "has_retrieved_contexts": true,
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy",
+        "answer_correctness",
+        "context_recall"
+      ],
+      "metric_scores": {
+        "faithfulness": 0.7778,
+        "answer_relevancy": 0.9792,
+        "answer_correctness": null,
+        "context_recall": 0.75
+      },
+      "metric_errors": {
+        "answer_correctness": "RAGAS returned no numeric score."
+      },
+      "notes": [],
+      "duration_ms": 10949.44,
+      "expected_sources": [
+        "risk_register_mar_2026.csv",
+        "financial_summary_mar_2026.csv"
+      ],
+      "expected_answer_points": [
+        "Aggregate risk scores by linked work package",
+        "Identify Viaduct Civil Works as highest total risk score at 51",
+        "Identify Utilities Relocation as worst schedule variance at -12.0%",
+        "Conclude they do not match"
+      ],
+      "scope": "extended",
+      "average_metric_score": 0.8357
+    },
+    {
+      "id": "TC-13",
+      "difficulty": "Hard",
+      "question": "The March executive update says Package V3 is under pressure because of Cheras North disruption and utility diversion complexity. Do the structured datasets support that view, and what are the strongest data points?",
+      "route_expectation": "hybrid",
+      "route": "hybrid",
+      "runtime_success": true,
+      "error_type": null,
+      "error_detail": null,
+      "generated_answer": "**Answer**  \nYes \u2013 the structured schedule, risk, milestone, and financial data all confirm that Package\u202fV3 is experiencing pressure from the Cheras\u202fNorth disruption and utility\u2011diversion complexity.\n\n**Key data points**\n\n| Data source | What it shows | Why it matters |\n|-------------|---------------|----------------|\n| Executive Steering Update (schedule table) | Actual progress 36.8\u202f% vs planned 39.0\u202f% \u2192 schedule variance \u20132.2\u202f% | Direct evidence of schedule pressure on Package\u202fV3 (Source: Executive Steering Update Mar\u202f2026, section\u202f1) |\n| Executive Steering Update (risk table) | Utility diversion approval delay = *Severe*; Unidentified services in Cheras North = *High* | Quantifies the severity of the disruption and complexity (Source: Executive Steering Update Mar\u202f2026, section\u202f4) |\n| Executive Steering Update (milestone outlook) | MS\u201105 (Cheras North utility diversion) baseline 31\u202fMar\u202f2026 \u2192 latest forecast 18\u202fApr\u202f2026 | Concrete milestone delay linked to the utility diversion (Source: Executive Steering Update Mar\u202f2026, section\u202f4A) |\n| Financial summary (Cheras North Station) | Schedule variance \u20135.5\u202f%; cost variance +RM\u202f17\u202fm; remarks cite utility conflict and revised foundation detailing | Shows both schedule lag and cost impact tied to the same disruption (Source: financial_summary_mar_2026.csv) |\n| Risk register (Cheras North) | R\u2011001: high\u2011impact utility diversion approval delay (status\u202fEscalated); R\u2011002: unidentified underground services (status\u202fMitigating) | Confirms that the utility diversion and unknown services are key risks for the package (Source: risk_register_mar_2026.csv) |\n\n**Conclusion**  \nThe structured datasets corroborate the March executive update\u2019s claim: Package\u202fV3 is under pressure, primarily due to the Cheras\u202fNorth utility\u2011diversion disruption and the complexity of unidentified underground services. The strongest evidence comes from the schedule variance, the severe/high risk ratings, the milestone delay, and the financial impact tied to utility conflicts.",
+      "retrieved_contexts": [
+        "Package V3 remains deliverable but is under increasing schedule pressure. Overall actual progress is 36.8% versus planned 39.0% , giving a schedule variance of -2.2% . Cost is currently manageable but forecast at complet",
+        "Utility diversion approval delay, Current View = Severe. Utility diversion approval delay, Executive Note = Requires employer-level escalation with authority. Unidentified services in Cheras North corridor, Current View = High. Unidentified services in Cheras North corridor, Executive Note = Design and construction sequence remains constrained. Interface drawing approval lag, Current View = High. Interface drawing approval lag, Executive Note = Threatens downstream systems access and testing readiness. Precast supply bottleneck, Current View = Moderate. Precast supply bottleneck, Executive Note = Alternate source should be readied immediately. Pending VOs hardening into claims, Current View = Moderate. Pending VOs hardening into claims, Executive Note = Stronger instruction discipline required",
+        "MS-05, Description = Cheras North utility diversion complete. MS-05, Baseline = 31 Mar 2026. MS-05, Latest Forecast = 18 Apr 2026. MS-05, Note = Dependent on unresolved approval and service conflict. MS-06, Description = Systems interface design freeze. MS-06, Baseline = 31 Mar 2026. MS-06, Latest Forecast = 22 Apr 2026. MS-06, Note = Partial approvals only as of 20 Mar 2026",
+        "Query on dataset financial_summary_mar_2026 from financial_summary_mar_2026.csv returned 1 row(s) after filters [{\"column\": \"work_package\", \"op\": \"=\", \"value\": \"Cheras North Station Structural and Architectural\"}]. Top row: {\"work_package\": \"Cheras North Station Structural and Architectural\", \"actual_progress_pct\": 28.5, \"planned_progress_pct\": 34, \"schedule_variance_pct\": -5.5, \"cost_variance_rm_m\": 17, \"remarks\": \"Utility conflict and revised foundation detailing slowed progress materially\"}",
+        "Query on dataset risk_register_mar_2026 from risk_register_mar_2026.csv returned 1 row(s) after filters [{\"column\": \"linked_work_package\", \"op\": \"=\", \"value\": \"Cheras North Station Structural and Architectural\"}]. Top row: {\"risk_id\": \"R-002\", \"title\": \"Unidentified underground services at Cheras North\", \"risk_score\": 20, \"status\": \"Mitigating\", \"mitigation\": \"Trial pits, redesign pile cap sequence, coordinate service protection with authority\", \"impact_area\": \"Schedule/Cost\"}"
+      ],
+      "citations": [
+        "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0002 | pages=1 | section=1. Headline Position",
+        "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0006 | pages=2 | section=4. Priority Risks",
+        "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0007 | pages=2 | section=4A. Milestone Outlook",
+        "dataset=b3e39c26-f896-42e1-97dd-b4784990e9c5:financial_summary_mar_2026 | query_id=query_001 | filters=[{\"column\": \"work_package\", \"op\": \"=\", \"value\": \"Cheras North Station Structural and Architectural\"}] | aggregations=[] | group_by=[]",
+        "dataset=98ed9793-4561-41d9-87ce-31409166f99c:risk_register_mar_2026 | query_id=query_002 | filters=[{\"column\": \"linked_work_package\", \"op\": \"=\", \"value\": \"Cheras North Station Structural and Architectural\"}] | aggregations=[] | group_by=[]"
+      ],
+      "document_findings": {
+        "findings": [
+          {
+            "claim": "The March executive update\u2019s view that Package V3 is under pressure is reflected in the structured schedule data showing a schedule variance of \u20132.2% (actual progress 36.8% vs planned 39.0%).",
+            "evidence": [
+              {
+                "source": "Executive Steering Update Mar 2026.pdf",
+                "citation": "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0002 | pages=1 | section=1. Headline Position",
+                "snippet": "Package V3 remains deliverable but is under increasing schedule pressure. Overall actual progress is 36.8% versus planned 39.0% , giving a schedule variance of -2.2% . Cost is currently manageable but forecast at complet"
+              }
+            ]
+          },
+          {
+            "claim": "The structured risk table rates the utility diversion approval delay as \u2018Severe\u2019 and the unidentified services in the Cheras North corridor as \u2018High\u2019, confirming the cited disruption and complexity.",
+            "evidence": [
+              {
+                "source": "Executive Steering Update Mar 2026.pdf",
+                "citation": "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0006 | pages=2 | section=4. Priority Risks",
+                "snippet": "Utility diversion approval delay, Current View = Severe. Utility diversion approval delay, Executive Note = Requires employer-level escalation with authority. Unidentified services in Cheras North corridor, Current View = High. Unidentified services in Cheras North corridor, Executive Note = Design and construction sequence remains constrained. Interface drawing approval lag, Current View = High. Interface drawing approval lag, Executive Note = Threatens downstream systems access and testing readiness. Precast supply bottleneck, Current View = Moderate. Precast supply bottleneck, Executive Note = Alternate source should be readied immediately. Pending VOs hardening into claims, Current View = Moderate. Pending VOs hardening into claims, Executive Note = Stronger instruction discipline required"
+              }
+            ]
+          },
+          {
+            "claim": "Milestone MS\u201105 (Cheras North utility diversion) has slipped from a baseline of 31\u202fMar\u202f2026 to a latest forecast of 18\u202fApr\u202f2026, indicating a concrete delay linked to the utility diversion issue.",
+            "evidence": [
+              {
+                "source": "Executive Steering Update Mar 2026.pdf",
+                "citation": "document=Executive Steering Update Mar 2026.pdf | chunk=8ff5e30f-5f90-4c6c-9149-fdd315ee431a_chunk_0007 | pages=2 | section=4A. Milestone Outlook",
+                "snippet": "MS-05, Description = Cheras North utility diversion complete. MS-05, Baseline = 31 Mar 2026. MS-05, Latest Forecast = 18 Apr 2026. MS-05, Note = Dependent on unresolved approval and service conflict. MS-06, Description = Systems interface design freeze. MS-06, Baseline = 31 Mar 2026. MS-06, Latest Forecast = 22 Apr 2026. MS-06, Note = Partial approvals only as of 20 Mar 2026"
+              }
+            ]
+          }
+        ],
+        "insufficient_evidence": false
+      },
+      "data_findings": {
+        "findings": [
+          {
+            "claim": "Financial data for the Cheras North Station work package shows it is behind schedule (schedule variance -5.5%) and over budget (cost variance +RM17\u202fmillion), with remarks explicitly citing utility conflict and revised foundation detailing as material delays.",
+            "evidence": [
+              {
+                "source": "financial_summary_mar_2026.csv",
+                "citation": "dataset=b3e39c26-f896-42e1-97dd-b4784990e9c5:financial_summary_mar_2026 | query_id=query_001 | filters=[{\"column\": \"work_package\", \"op\": \"=\", \"value\": \"Cheras North Station Structural and Architectural\"}] | aggregations=[] | group_by=[]",
+                "snippet": "Query on dataset financial_summary_mar_2026 from financial_summary_mar_2026.csv returned 1 row(s) after filters [{\"column\": \"work_package\", \"op\": \"=\", \"value\": \"Cheras North Station Structural and Architectural\"}]. Top row: {\"work_package\": \"Cheras North Station Structural and Architectural\", \"actual_progress_pct\": 28.5, \"planned_progress_pct\": 34, \"schedule_variance_pct\": -5.5, \"cost_variance_rm_m\": 17, \"remarks\": \"Utility conflict and revised foundation detailing slowed progress materially\"}"
+              }
+            ]
+          },
+          {
+            "claim": "The risk register records a high\u2011impact utility diversion approval delay (risk R-001, risk_score 25, status Escalated) and an unidentified underground services risk (risk R-002, risk_score 20, status Mitigating) linked to the Cheras North work package, confirming utility diversion complexity as a key risk.",
+            "evidence": [
+              {
+                "source": "risk_register_mar_2026.csv",
+                "citation": "dataset=98ed9793-4561-41d9-87ce-31409166f99c:risk_register_mar_2026 | query_id=query_002 | filters=[{\"column\": \"linked_work_package\", \"op\": \"=\", \"value\": \"Cheras North Station Structural and Architectural\"}] | aggregations=[] | group_by=[]",
+                "snippet": "Query on dataset risk_register_mar_2026 from risk_register_mar_2026.csv returned 1 row(s) after filters [{\"column\": \"linked_work_package\", \"op\": \"=\", \"value\": \"Cheras North Station Structural and Architectural\"}]. Top row: {\"risk_id\": \"R-002\", \"title\": \"Unidentified underground services at Cheras North\", \"risk_score\": 20, \"status\": \"Mitigating\", \"mitigation\": \"Trial pits, redesign pile cap sequence, coordinate service protection with authority\", \"impact_area\": \"Schedule/Cost\"}"
+              }
+            ]
+          }
+        ],
+        "insufficient_evidence": false
+      },
+      "route_match": true,
+      "has_citations": true,
+      "has_retrieved_contexts": true,
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy",
+        "context_precision",
+        "context_recall"
+      ],
+      "metric_scores": {
+        "faithfulness": 0.0833,
+        "answer_relevancy": 0.9208,
+        "context_precision": 0.25,
+        "context_recall": 0.4
+      },
+      "metric_errors": {},
+      "notes": [],
+      "duration_ms": 7723.44,
+      "expected_sources": [
+        "executive_steering_update_mar_2026.md",
+        "financial_summary_mar_2026.csv",
+        "risk_register_mar_2026.csv"
+      ],
+      "expected_answer_points": [
+        "Answer yes, broadly or equivalent cautious support",
+        "Tie narrative to Cheras North Station Structural and Architectural pending VO exposure RM 12 million",
+        "Tie narrative to Cheras North Station Structural and Architectural cost variance RM 17 million",
+        "Tie narrative to Utilities Relocation schedule variance -12.0%",
+        "Tie narrative to escalated risk R-001 score 25"
+      ],
+      "scope": "extended",
+      "average_metric_score": 0.4135
+    },
+    {
+      "id": "TC-14",
+      "difficulty": "Adversarial",
+      "question": "The March executive update warns that pending VOs may harden into claims. Does the structured data show that the largest pending commercial exposure sits in exactly the same work package as the worst schedule pressure?",
+      "route_expectation": "hybrid",
+      "route": "hybrid",
+      "runtime_success": true,
+      "error_type": null,
+      "error_detail": null,
+      "generated_answer": "**Answer:**  \nNo \u2013 the structured data indicates that the work package with the largest pending commercial exposure is *Cheras North Station Structural and Architectural*, while the work package with the worst schedule pressure (most negative schedule variance) is *Utilities Relocation*.\n\n- Largest pending VO: 12\u202fRM in *Cheras North Station Structural and Architectural* (financial_summary_mar_2026.csv) (Source: financial_summary_mar_2026.csv | query_id=query_001).  \n- Worst schedule variance: \u201312.0\u202f% in *Utilities Relocation* (financial_summary_mar_2026.csv | query_id=query_002).  \n\nThus, the two work packages are distinct.",
+      "retrieved_contexts": [
+        "Query on dataset financial_summary_mar_2026 from financial_summary_mar_2026.csv returned 1 row(s) after filters []. Top row: {\"work_package\": \"Cheras North Station Structural and Architectural\", \"pending_vo_rm_m\": 12}",
+        "Query on dataset financial_summary_mar_2026 from financial_summary_mar_2026.csv returned 1 row(s) after filters []. Top row: {\"work_package\": \"Utilities Relocation\", \"schedule_variance_pct\": -12.0}"
+      ],
+      "citations": [
+        "dataset=b3e39c26-f896-42e1-97dd-b4784990e9c5:financial_summary_mar_2026 | query_id=query_001 | filters=[] | aggregations=[] | group_by=[]",
+        "dataset=b3e39c26-f896-42e1-97dd-b4784990e9c5:financial_summary_mar_2026 | query_id=query_002 | filters=[] | aggregations=[] | group_by=[]"
+      ],
+      "document_findings": {
+        "findings": [],
+        "insufficient_evidence": true
+      },
+      "data_findings": {
+        "findings": [
+          {
+            "claim": "The work package with the largest pending commercial exposure (pending VO) is not the same as the work package with the worst schedule pressure (most negative schedule variance).",
+            "evidence": [
+              {
+                "source": "financial_summary_mar_2026.csv",
+                "citation": "dataset=b3e39c26-f896-42e1-97dd-b4784990e9c5:financial_summary_mar_2026 | query_id=query_001 | filters=[] | aggregations=[] | group_by=[]",
+                "snippet": "Query on dataset financial_summary_mar_2026 from financial_summary_mar_2026.csv returned 1 row(s) after filters []. Top row: {\"work_package\": \"Cheras North Station Structural and Architectural\", \"pending_vo_rm_m\": 12}"
+              },
+              {
+                "source": "financial_summary_mar_2026.csv",
+                "citation": "dataset=b3e39c26-f896-42e1-97dd-b4784990e9c5:financial_summary_mar_2026 | query_id=query_002 | filters=[] | aggregations=[] | group_by=[]",
+                "snippet": "Query on dataset financial_summary_mar_2026 from financial_summary_mar_2026.csv returned 1 row(s) after filters []. Top row: {\"work_package\": \"Utilities Relocation\", \"schedule_variance_pct\": -12.0}"
+              }
+            ]
+          }
+        ],
+        "insufficient_evidence": false
+      },
+      "route_match": true,
+      "has_citations": true,
+      "has_retrieved_contexts": true,
+      "primary_metrics": [
+        "faithfulness",
+        "answer_correctness",
+        "answer_relevancy"
+      ],
+      "metric_scores": {
+        "faithfulness": null,
+        "answer_correctness": null,
+        "answer_relevancy": null
+      },
+      "metric_errors": {
+        "faithfulness": "RAGAS returned no numeric score.",
+        "answer_correctness": "RAGAS returned no numeric score.",
+        "answer_relevancy": "RAGAS returned no numeric score."
+      },
+      "notes": [],
+      "duration_ms": 15870.44,
+      "expected_sources": [
+        "executive_steering_update_mar_2026.md",
+        "financial_summary_mar_2026.csv",
+        "risk_register_mar_2026.csv"
+      ],
+      "expected_answer_points": [
+        "Answer no, not exactly or equivalent cautious phrasing",
+        "Identify Cheras North Station Structural and Architectural as largest pending VO exposure at RM 12 million",
+        "Identify Utilities Relocation as worst schedule variance at -12.0%",
+        "Explain the broader narrative is directionally supported even though the exact leaders differ"
+      ],
+      "scope": "extended",
+      "average_metric_score": null
+    }
+  ]
+}

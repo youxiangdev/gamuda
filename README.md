@@ -72,6 +72,26 @@ Frontend dev server:
 
 - `http://127.0.0.1:5173`
 
+## Docker Storage Persistence
+
+The app writes uploads, ingestion artifacts, and logs under `/app/storage` inside the container.
+If you want uploaded data to survive container rebuilds or restarts, mount a persistent volume to that path.
+
+Examples:
+
+- local compose already persists storage with `./storage:/app/storage`
+- production compose now uses a named volume at `/app/storage`
+- plain Docker run should include a volume flag such as `-v gamuda_storage:/app/storage`
+
+Optional environment variables:
+
+- `STORAGE_DIR=storage/uploads`
+- `ARTIFACTS_DIR=storage/artifacts`
+- `PDF_DO_TABLE_STRUCTURE=false` to reduce Docling memory usage in constrained production deployments
+- `PDF_TABLE_MODE=fast`, `PDF_NUM_THREADS=1`, `PDF_LAYOUT_BATCH_SIZE=1`, and `PDF_TABLE_BATCH_SIZE=1` for low-memory PDF parsing
+
+If you deploy on a managed platform, attach a persistent disk or volume and mount it at `/app/storage`. Without that, uploads and generated artifacts will be ephemeral.
+
 ## Available Endpoints
 
 | Method | Path | Purpose |
@@ -80,6 +100,30 @@ Frontend dev server:
 | `POST` | `/api/v1/documents/upload` | Upload a file and trigger ingestion |
 | `GET` | `/api/v1/documents/{document_id}` | Fetch uploaded document metadata |
 | `GET` | `/api/v1/ingestions/{job_id}` | Fetch ingestion job status |
+
+## Benchmarking
+
+The repo includes a direct-graph benchmark runner for `TC01-TC14`.
+
+Default command:
+
+```bash
+uv run python scripts/run_benchmark.py
+```
+
+Useful options:
+
+```bash
+uv run python scripts/run_benchmark.py --case-id TC-04
+uv run python scripts/run_benchmark.py --no-ragas
+uv run python scripts/run_benchmark.py --save-current
+```
+
+Benchmark inputs and outputs:
+
+- dataset source of truth: `data/evaluation/ragas_dataset.json`
+- generated reports: `data/evaluation/results/<timestamp>/results.json` and `results.md`
+- canonical snapshot: `data/evaluation/ragas_results.json` and `data/evaluation/RAGAS_RESULTS.md`
 
 ## Upload Assumptions
 

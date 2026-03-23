@@ -1,0 +1,389 @@
+{
+  "dataset_name": "gamuda_take_home_ragas_eval",
+  "created_at": "2026-03-23T00:00:00Z",
+  "samples": [
+    {
+      "id": "TC-01",
+      "difficulty": "Easy",
+      "question": "What was the overall actual progress for Package V3 in January 2026?",
+      "ground_truth": "The overall actual progress for Package V3 in January 2026 was 31.5% against a planned 32.0%.",
+      "expected_answer_points": [
+        "State actual progress as 31.5%",
+        "State planned progress as 32.0%",
+        "Stay narrowly scoped to January 2026 Package V3 progress"
+      ],
+      "expected_sources": [
+        "monthly_status_report_jan_2026.md"
+      ],
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy"
+      ],
+      "route_expectation": "document",
+      "generated_answer": "",
+      "retrieved_contexts": [],
+      "citations": [],
+      "route": "",
+      "notes": "Required core benchmark."
+    },
+    {
+      "id": "TC-02",
+      "difficulty": "Easy",
+      "question": "Which station package showed worse schedule slippage in February 2026, Pandan Gateway or Cheras North, and what was the evidence?",
+      "ground_truth": "Cheras North showed worse schedule slippage in February 2026. Pandan Gateway was 33.0% planned versus 32.0% actual, while Cheras North was 29.0% planned versus 25.0% actual.",
+      "expected_answer_points": [
+        "Identify Cheras North as worse",
+        "Include Pandan Gateway 33.0% planned versus 32.0% actual",
+        "Include Cheras North 29.0% planned versus 25.0% actual"
+      ],
+      "expected_sources": [
+        "monthly_status_report_feb_2026.md"
+      ],
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy"
+      ],
+      "route_expectation": "document",
+      "generated_answer": "",
+      "retrieved_contexts": [],
+      "citations": [],
+      "route": "",
+      "notes": "Required core benchmark."
+    },
+    {
+      "id": "TC-03",
+      "difficulty": "Medium",
+      "question": "What were the principal causes of delay at Cheras North by February 2026, and were they fully resolved by March 2026?",
+      "ground_truth": "The principal causes of delay at Cheras North by February 2026 were utility conflict, unresolved authority clearance, additional underground services, and redesign or sequence impacts. They were not fully resolved by March 2026 because the executive update still showed utility diversion slipping into April.",
+      "expected_answer_points": [
+        "Mention utility conflict or diversion issues",
+        "Mention unresolved authority clearance",
+        "Mention additional underground services",
+        "Mention redesign or sequence impacts",
+        "Conclude the issues were not fully resolved by March"
+      ],
+      "expected_sources": [
+        "monthly_status_report_jan_2026.md",
+        "monthly_status_report_feb_2026.md",
+        "executive_steering_update_mar_2026.md",
+        "risk_register_mar_2026.csv"
+      ],
+      "primary_metrics": [
+        "faithfulness",
+        "context_precision",
+        "context_recall",
+        "answer_relevancy"
+      ],
+      "route_expectation": "hybrid",
+      "generated_answer": "",
+      "retrieved_contexts": [],
+      "citations": [],
+      "route": "",
+      "notes": "Required core benchmark."
+    },
+    {
+      "id": "TC-04",
+      "difficulty": "Medium",
+      "question": "Which commercial issues most threatened Package V3 by March 2026, and which references support that view?",
+      "ground_truth": "The strongest commercial threats to Package V3 by March 2026 were Cheras North redesign and sequence disruption, utility-related changes and protection measures, extended preliminaries from recovery working windows, and prolonged interface coordination. Supporting references should include VO-019, VO-020, VO-021, the March finance sheet, and the March executive update.",
+      "expected_answer_points": [
+        "Mention Cheras North redesign or sequence disruption",
+        "Mention utility-related changes or protection measures",
+        "Mention extended preliminaries or recovery working windows",
+        "Mention prolonged interface coordination",
+        "Reference VO-019, VO-020, or VO-021 and March finance or executive update support"
+      ],
+      "expected_sources": [
+        "executive_steering_update_mar_2026.md",
+        "financial_summary_mar_2026.csv",
+        "risk_register_mar_2026.csv"
+      ],
+      "primary_metrics": [
+        "faithfulness",
+        "context_precision",
+        "answer_relevancy"
+      ],
+      "route_expectation": "hybrid",
+      "generated_answer": "",
+      "retrieved_contexts": [],
+      "citations": [],
+      "route": "",
+      "notes": "Required core benchmark."
+    },
+    {
+      "id": "TC-05",
+      "difficulty": "Hard",
+      "question": "How did the outlook for Cheras North utility diversion change between February and March 2026?",
+      "ground_truth": "In February 2026 the team still expected Cheras North utility diversion completion in March, subject to authority clearance. By the March executive update the forecast had slipped to 18 Apr 2026.",
+      "expected_answer_points": [
+        "State that February still expected March completion",
+        "State that the March update moved the forecast to 18 Apr 2026",
+        "Frame the change as a deterioration in outlook"
+      ],
+      "expected_sources": [
+        "monthly_status_report_feb_2026.md",
+        "executive_steering_update_mar_2026.md",
+        "risk_register_mar_2026.csv"
+      ],
+      "primary_metrics": [
+        "faithfulness",
+        "context_recall",
+        "answer_correctness"
+      ],
+      "route_expectation": "hybrid",
+      "generated_answer": "",
+      "retrieved_contexts": [],
+      "citations": [],
+      "route": "",
+      "notes": "Required core benchmark."
+    },
+    {
+      "id": "TC-06",
+      "difficulty": "Hard",
+      "question": "Why is Package V3 considered delivery-sensitive within the East Metro programme, and which downstream programme activities are most exposed if it slips further?",
+      "ground_truth": "Package V3 is delivery-sensitive because it combines high-visibility station works, constrained traffic and utility interfaces, and systems access dependencies. If it slips further, the most exposed downstream activities are systems design freeze, access handover, installation readiness, and later integration activity.",
+      "expected_answer_points": [
+        "Explain why Package V3 is programme-sensitive beyond just local delay",
+        "Mention constrained traffic, utility, or interface conditions",
+        "Mention systems design freeze or interface readiness",
+        "Mention access handover, installation readiness, or later integration impacts"
+      ],
+      "expected_sources": [
+        "PROGRAMME_BRIEF.md",
+        "PACKAGE_V3_BRIEF.md",
+        "executive_steering_update_mar_2026.md"
+      ],
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy",
+        "context_recall"
+      ],
+      "route_expectation": "document",
+      "generated_answer": "",
+      "retrieved_contexts": [],
+      "citations": [],
+      "route": "",
+      "notes": "Required core benchmark."
+    },
+    {
+      "id": "TC-07",
+      "difficulty": "Adversarial",
+      "question": "Has NCR-014 been fully closed?",
+      "ground_truth": "No, NCR-014 has not been fully verified as closed at project controls level. Site reported it closed, but independent QA verification remained pending and later records were still being reconciled.",
+      "expected_answer_points": [
+        "Answer no or not fully verified",
+        "Distinguish site closure from independent verification",
+        "Mention later reconciliation or pending verification"
+      ],
+      "expected_sources": [
+        "monthly_status_report_jan_2026.md",
+        "monthly_status_report_feb_2026.md",
+        "risk_register_mar_2026.csv",
+        "executive_steering_update_mar_2026.md"
+      ],
+      "primary_metrics": [
+        "faithfulness",
+        "answer_correctness"
+      ],
+      "route_expectation": "hybrid",
+      "generated_answer": "",
+      "retrieved_contexts": [],
+      "citations": [],
+      "route": "",
+      "notes": "Required core benchmark. Reward caution and non-overclaiming."
+    },
+    {
+      "id": "TC-08",
+      "difficulty": "Adversarial",
+      "question": "Was the systems interface design freeze achieved by the end of March 2026?",
+      "ground_truth": "No. The baseline target for systems interface design freeze was 31 Mar 2026, but the March executive update moved the forecast to 22 Apr 2026, so it was not achieved by the end of March.",
+      "expected_answer_points": [
+        "Answer no",
+        "Mention the baseline target of 31 Mar 2026",
+        "Mention the forecast moved to 22 Apr 2026",
+        "Distinguish target versus actual status"
+      ],
+      "expected_sources": [
+        "PACKAGE_V3_BRIEF.md",
+        "monthly_status_report_jan_2026.md",
+        "monthly_status_report_feb_2026.md",
+        "executive_steering_update_mar_2026.md"
+      ],
+      "primary_metrics": [
+        "faithfulness",
+        "answer_correctness",
+        "answer_relevancy"
+      ],
+      "route_expectation": "document",
+      "generated_answer": "",
+      "retrieved_contexts": [],
+      "citations": [],
+      "route": "",
+      "notes": "Required core benchmark. Reward caution and date precision."
+    },
+    {
+      "id": "TC-09",
+      "difficulty": "Easy",
+      "question": "Which work package had the largest pending variation order exposure in the March financial dataset, and what was the primary VO reference?",
+      "ground_truth": "Cheras North Station Structural and Architectural had the largest pending variation order exposure in the March financial dataset at RM 12 million, and the primary VO reference was VO-021.",
+      "expected_answer_points": [
+        "Identify Cheras North Station Structural and Architectural",
+        "Include RM 12 million pending VO exposure",
+        "Include VO-021",
+        "Make clear the answer comes from the structured March financial dataset"
+      ],
+      "expected_sources": [
+        "financial_summary_mar_2026.csv"
+      ],
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy",
+        "answer_correctness"
+      ],
+      "route_expectation": "data",
+      "generated_answer": "",
+      "retrieved_contexts": [],
+      "citations": [],
+      "route": "",
+      "notes": "Extended benchmark covering data routing."
+    },
+    {
+      "id": "TC-10",
+      "difficulty": "Medium",
+      "question": "Which March work packages were 5.0 percentage points or more behind planned progress, ranked from worst to less severe?",
+      "ground_truth": "The March work packages that were 5.0 percentage points or more behind planned progress were Utilities Relocation at -12.0%, Cheras North Station Structural and Architectural at -5.5%, and Systems Interface and Design Coordination at -5.0%, ranked from worst to less severe.",
+      "expected_answer_points": [
+        "Return a ranked list rather than a vague summary",
+        "Include Utilities Relocation at -12.0%",
+        "Include Cheras North Station Structural and Architectural at -5.5%",
+        "Include Systems Interface and Design Coordination at -5.0%"
+      ],
+      "expected_sources": [
+        "financial_summary_mar_2026.csv"
+      ],
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy",
+        "answer_correctness"
+      ],
+      "route_expectation": "data",
+      "generated_answer": "",
+      "retrieved_contexts": [],
+      "citations": [],
+      "route": "",
+      "notes": "Extended benchmark covering ranking and filtering."
+    },
+    {
+      "id": "TC-11",
+      "difficulty": "Medium",
+      "question": "Which risks were in Escalated status in the March risk register, and what were their risk scores and escalation levels?",
+      "ground_truth": "The risks in Escalated status in the March risk register were R-001 with risk score 25 and escalation level Employer, and R-014 with risk score 20 and escalation level Steering Committee.",
+      "expected_answer_points": [
+        "Identify R-001",
+        "Include risk score 25 and escalation level Employer for R-001",
+        "Identify R-014",
+        "Include risk score 20 and escalation level Steering Committee for R-014"
+      ],
+      "expected_sources": [
+        "risk_register_mar_2026.csv"
+      ],
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy",
+        "answer_correctness"
+      ],
+      "route_expectation": "data",
+      "generated_answer": "",
+      "retrieved_contexts": [],
+      "citations": [],
+      "route": "",
+      "notes": "Extended benchmark covering row-level data extraction."
+    },
+    {
+      "id": "TC-12",
+      "difficulty": "Hard",
+      "question": "Which work package carries the highest total risk score in the March risk register, and does that match the work package with the worst schedule variance in the March financial summary?",
+      "ground_truth": "Viaduct Civil Works carries the highest total risk score in the March risk register at 51. That does not match the work package with the worst schedule variance in the March financial summary, which is Utilities Relocation at -12.0%.",
+      "expected_answer_points": [
+        "Aggregate risk scores by linked work package",
+        "Identify Viaduct Civil Works as highest total risk score at 51",
+        "Identify Utilities Relocation as worst schedule variance at -12.0%",
+        "Conclude they do not match"
+      ],
+      "expected_sources": [
+        "risk_register_mar_2026.csv",
+        "financial_summary_mar_2026.csv"
+      ],
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy",
+        "answer_correctness",
+        "context_recall"
+      ],
+      "route_expectation": "data",
+      "generated_answer": "",
+      "retrieved_contexts": [],
+      "citations": [],
+      "route": "",
+      "notes": "Extended benchmark covering multi-query structured reasoning."
+    },
+    {
+      "id": "TC-13",
+      "difficulty": "Hard",
+      "question": "The March executive update says Package V3 is under pressure because of Cheras North disruption and utility diversion complexity. Do the structured datasets support that view, and what are the strongest data points?",
+      "ground_truth": "Yes, broadly. The structured datasets support that view because Cheras North Station Structural and Architectural has the largest pending VO exposure at RM 12 million and the highest cost variance at RM 17 million, while Utilities Relocation shows the worst schedule variance at -12.0% and the highest single escalated risk R-001 at score 25.",
+      "expected_answer_points": [
+        "Answer yes, broadly or equivalent cautious support",
+        "Tie narrative to Cheras North Station Structural and Architectural pending VO exposure RM 12 million",
+        "Tie narrative to Cheras North Station Structural and Architectural cost variance RM 17 million",
+        "Tie narrative to Utilities Relocation schedule variance -12.0%",
+        "Tie narrative to escalated risk R-001 score 25"
+      ],
+      "expected_sources": [
+        "executive_steering_update_mar_2026.md",
+        "financial_summary_mar_2026.csv",
+        "risk_register_mar_2026.csv"
+      ],
+      "primary_metrics": [
+        "faithfulness",
+        "answer_relevancy",
+        "context_precision",
+        "context_recall"
+      ],
+      "route_expectation": "hybrid",
+      "generated_answer": "",
+      "retrieved_contexts": [],
+      "citations": [],
+      "route": "",
+      "notes": "Extended benchmark covering hybrid support versus repetition."
+    },
+    {
+      "id": "TC-14",
+      "difficulty": "Adversarial",
+      "question": "The March executive update warns that pending VOs may harden into claims. Does the structured data show that the largest pending commercial exposure sits in exactly the same work package as the worst schedule pressure?",
+      "ground_truth": "No, not exactly at single-work-package level. The largest pending VO exposure sits in Cheras North Station Structural and Architectural at RM 12 million, while the worst schedule variance sits in Utilities Relocation at -12.0%. The answer should still note that both belong to the same broader Cheras North and utilities problem area, so the narrative is directionally supported even though the structured leaders differ.",
+      "expected_answer_points": [
+        "Answer no, not exactly or equivalent cautious phrasing",
+        "Identify Cheras North Station Structural and Architectural as largest pending VO exposure at RM 12 million",
+        "Identify Utilities Relocation as worst schedule variance at -12.0%",
+        "Explain the broader narrative is directionally supported even though the exact leaders differ"
+      ],
+      "expected_sources": [
+        "executive_steering_update_mar_2026.md",
+        "financial_summary_mar_2026.csv",
+        "risk_register_mar_2026.csv"
+      ],
+      "primary_metrics": [
+        "faithfulness",
+        "answer_correctness",
+        "answer_relevancy"
+      ],
+      "route_expectation": "hybrid",
+      "generated_answer": "",
+      "retrieved_contexts": [],
+      "citations": [],
+      "route": "",
+      "notes": "Extended benchmark. Reward precision and non-overclaiming."
+    }
+  ]
+}

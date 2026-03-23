@@ -106,6 +106,7 @@ The `evaluation/` directory currently contains the first pass of the RAGAS test 
 Included:
 
 - `RAGAS_TEST_CASES.md`
+- `TC09_TC14_DATA_HYBRID_TEST_CASES.md`
 
 This file defines:
 
@@ -113,6 +114,12 @@ This file defines:
 - difficulty levels
 - expected answer direction
 - expected evidence sources
+
+The additional `TC09` to `TC14` file extends coverage toward:
+
+- structured data-agent queries over ingested parquet datasets
+- multi-query tabular analysis
+- hybrid report-plus-data questions
 
 ## Why The Data Focuses On Package V3
 
