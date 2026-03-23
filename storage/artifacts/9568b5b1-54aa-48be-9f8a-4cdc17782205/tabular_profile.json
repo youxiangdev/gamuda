@@ -1,0 +1,162 @@
+{
+  "datasets": [
+    {
+      "dataset_name": "risk_register_mar_2026",
+      "row_count": 14,
+      "column_count": 18,
+      "columns": [
+        {
+          "name": "risk_id",
+          "dtype": "string"
+        },
+        {
+          "name": "category",
+          "dtype": "string"
+        },
+        {
+          "name": "title",
+          "dtype": "string"
+        },
+        {
+          "name": "description",
+          "dtype": "string"
+        },
+        {
+          "name": "cause",
+          "dtype": "string"
+        },
+        {
+          "name": "impact_area",
+          "dtype": "string"
+        },
+        {
+          "name": "likelihood",
+          "dtype": "Int64"
+        },
+        {
+          "name": "impact",
+          "dtype": "Int64"
+        },
+        {
+          "name": "risk_score",
+          "dtype": "Int64"
+        },
+        {
+          "name": "owner",
+          "dtype": "string"
+        },
+        {
+          "name": "response_strategy",
+          "dtype": "string"
+        },
+        {
+          "name": "mitigation",
+          "dtype": "string"
+        },
+        {
+          "name": "target_date",
+          "dtype": "string"
+        },
+        {
+          "name": "last_updated",
+          "dtype": "string"
+        },
+        {
+          "name": "status",
+          "dtype": "string"
+        },
+        {
+          "name": "escalation_level",
+          "dtype": "string"
+        },
+        {
+          "name": "residual_score",
+          "dtype": "Int64"
+        },
+        {
+          "name": "linked_work_package",
+          "dtype": "string"
+        }
+      ],
+      "sample_rows": [
+        {
+          "risk_id": "R-001",
+          "category": "Approvals",
+          "title": "Utility diversion approval delay",
+          "description": "Final diversion approval for the Cheras North Station corridor remains pending with the utility authority.",
+          "cause": "Late response from authority and unresolved crossing method comments",
+          "impact_area": "Schedule/Cost",
+          "likelihood": 5,
+          "impact": 5,
+          "risk_score": 25,
+          "owner": "Utilities Manager",
+          "response_strategy": "Escalate",
+          "mitigation": "Escalate through employer, submit revised method statement, extend night shift crew once permit is granted",
+          "target_date": "2026-03-31",
+          "last_updated": "2026-03-20",
+          "status": "Escalated",
+          "escalation_level": "Employer",
+          "residual_score": 20,
+          "linked_work_package": "Utilities Relocation"
+        },
+        {
+          "risk_id": "R-002",
+          "category": "Existing Conditions",
+          "title": "Unidentified underground services at Cheras North",
+          "description": "Additional telecom ducts and an uncharted water main were encountered near Cheras North Station.",
+          "cause": "Legacy as-built records were incomplete",
+          "impact_area": "Schedule/Cost",
+          "likelihood": 5,
+          "impact": 4,
+          "risk_score": 20,
+          "owner": "Construction Manager",
+          "response_strategy": "Mitigate",
+          "mitigation": "Trial pits, redesign pile cap sequence, coordinate service protection with authority",
+          "target_date": "2026-10-04",
+          "last_updated": "2026-03-19",
+          "status": "Mitigating",
+          "escalation_level": "Project",
+          "residual_score": 16,
+          "linked_work_package": "Cheras North Station Structural and Architectural"
+        },
+        {
+          "risk_id": "R-003",
+          "category": "Weather",
+          "title": "Prolonged heavy rainfall affecting pier works",
+          "description": "High rainfall reduced crane windows and concrete productivity during February.",
+          "cause": "Seasonal weather and saturated ground conditions",
+          "impact_area": "Schedule",
+          "likelihood": 4,
+          "impact": 4,
+          "risk_score": 16,
+          "owner": "Project Director",
+          "response_strategy": "Mitigate",
+          "mitigation": "Resequence spans, move crews to sheltered work fronts, use weekend recovery shifts",
+          "target_date": "2026-04-15",
+          "last_updated": "2026-03-18",
+          "status": "Mitigating",
+          "escalation_level": "Project",
+          "residual_score": 12,
+          "linked_work_package": "Viaduct Civil Works"
+        }
+      ],
+      "parquet_path": "storage/artifacts/9568b5b1-54aa-48be-9f8a-4cdc17782205/risk_register_mar_2026.parquet"
+    }
+  ],
+  "repair_summary": {
+    "rows_repaired": 1,
+    "rows_padded": 0,
+    "rows_merged_into_date_column": 1,
+    "rows_merged_into_tail_column": 0,
+    "rows_truncated_with_tail_merge": 0
+  },
+  "repair_log": [
+    {
+      "row_number": 4,
+      "issue": "extra_columns",
+      "strategy": "rows_merged_into_date_column",
+      "expected_columns": 18,
+      "actual_columns": 19
+    }
+  ]
+}
