@@ -4,9 +4,11 @@ from pathlib import Path
 
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.datamodel.pipeline_options import TableFormerMode
 from docling.document_converter import DocumentConverter
 from docling.document_converter import PdfFormatOption
 
+from app.core.config import get_settings
 from app.services.pdf_ingestion.chunk_builder import ChunkRecordBuilder
 from app.services.pdf_ingestion.document_context import DocumentContextExtractor
 from app.services.storage_service import StorageService
@@ -23,11 +25,16 @@ class DoclingPipeline:
     """Structured PDF ingestion backed by Docling."""
 
     def __init__(self) -> None:
+        settings = get_settings()
         pipeline_options = PdfPipelineOptions()
         pipeline_options.do_ocr = False
         pipeline_options.force_backend_text = True
-        pipeline_options.do_table_structure = True
-        pipeline_options.document_timeout = 120
+        pipeline_options.do_table_structure = settings.pdf_do_table_structure
+        pipeline_options.document_timeout = settings.pdf_document_timeout_seconds
+        pipeline_options.accelerator_options.num_threads = settings.pdf_num_threads
+        pipeline_options.layout_batch_size = settings.pdf_layout_batch_size
+        pipeline_options.table_batch_size = settings.pdf_table_batch_size
+        pipeline_options.table_structure_options.mode = TableFormerMode(settings.pdf_table_mode)
 
         self.converter = DocumentConverter(
             format_options={

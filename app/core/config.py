@@ -21,6 +21,12 @@ class Settings(BaseSettings):
     jina_embedding_dimensions: int = 1024
     jina_embedding_batch_size: int = 32
     jina_embedding_timeout_seconds: float = 30.0
+    pdf_do_table_structure: bool = True
+    pdf_table_mode: str = "accurate"
+    pdf_num_threads: int = 4
+    pdf_layout_batch_size: int = 4
+    pdf_table_batch_size: int = 4
+    pdf_document_timeout_seconds: int = 120
     groq_api_key: SecretStr | None = None
     google_api_key: SecretStr | None = None
     gemini_api_key: SecretStr | None = None
@@ -49,6 +55,14 @@ class Settings(BaseSettings):
             return normalized.replace("postgresql://", "postgresql+psycopg://", 1)
         if normalized.startswith("postgresql+psycopg2://"):
             return normalized.replace("postgresql+psycopg2://", "postgresql+psycopg://", 1)
+        return normalized
+
+    @field_validator("pdf_table_mode", mode="before")
+    @classmethod
+    def normalize_pdf_table_mode(cls, value: str) -> str:
+        normalized = str(value).strip().lower()
+        if normalized not in {"fast", "accurate"}:
+            raise ValueError("pdf_table_mode must be either 'fast' or 'accurate'.")
         return normalized
 
 
