@@ -4,9 +4,6 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     HF_HOME=/app/.cache/huggingface
 
-ARG TORCH_VERSION=2.10.0
-ARG TORCHVISION_VERSION=0.25.0
-
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -22,14 +19,13 @@ COPY pyproject.toml uv.lock ./
 COPY app ./app
 COPY README.md architecture.md decision.md ./
 
-# Export the locked dependencies minus PyTorch, then install CPU-only torch
-# explicitly so Railway does not pull the CUDA package set.
-RUN uv export --format requirements.txt --frozen --no-header --no-annotate --no-hashes \
-        --no-emit-project --prune torch --prune torchvision > requirements.lock.txt \
+# Resolve a fresh CPU-only dependency set for the active Linux platform so
+# Railway does not pull the CUDA package set from the existing lockfile.
+RUN uv pip compile pyproject.toml --python-version 3.12 --torch-backend cpu \
+        --no-header --no-annotate --no-strip-markers --emit-index-url \
+        -o requirements.lock.txt \
     && uv venv /app/.venv \
-    && uv pip install --python /app/.venv/bin/python --no-cache -r requirements.lock.txt \
-    && uv pip install --python /app/.venv/bin/python --no-cache --torch-backend cpu \
-        torch==${TORCH_VERSION} torchvision==${TORCHVISION_VERSION} \
+    && uv pip install --python /app/.venv/bin/python --no-cache --torch-backend cpu -r requirements.lock.txt \
     && uv pip install --python /app/.venv/bin/python --no-cache --no-deps . \
     && rm -rf /root/.cache /app/.cache requirements.lock.txt
 
