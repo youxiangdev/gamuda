@@ -79,6 +79,7 @@ class CsvLoader:
         normalized = normalized.replace(r"^\s*$", pd.NA, regex=True)
         normalized = normalized.convert_dtypes()
         normalized = self._normalize_date_columns(normalized)
+        normalized = self._normalize_numeric_columns(normalized)
 
         parquet_path = artifact_dir / f"{dataset_name}.parquet"
         normalized.to_parquet(parquet_path, index=False)
@@ -213,9 +214,61 @@ class CsvLoader:
                 dataframe[column] = parsed.dt.strftime("%Y-%m-%d").astype("string")
         return dataframe
 
+    def _normalize_numeric_columns(self, dataframe: pd.DataFrame) -> pd.DataFrame:
+        for column in dataframe.columns:
+            if self._should_skip_numeric_inference(column):
+                continue
+
+            series = dataframe[column]
+            non_null = series.dropna()
+            if non_null.empty:
+                continue
+
+            parsed = self._to_numeric_series(series)
+            parsed_non_null = parsed[series.notna()]
+            if parsed_non_null.empty or not parsed_non_null.notna().all():
+                continue
+
+            if self._is_integer_like(parsed_non_null):
+                dataframe[column] = parsed.round().astype("Int64")
+            else:
+                dataframe[column] = parsed.astype("Float64")
+        return dataframe
+
     def _looks_like_date(self, value: str) -> bool:
         parsed = pd.to_datetime([value], errors="coerce", format="mixed", dayfirst=True)
         return bool(pd.notna(parsed[0]))
+
+    def _to_numeric_series(self, series: pd.Series) -> pd.Series:
+        cleaned = series.astype("string").str.replace(",", "", regex=False).str.strip()
+        return pd.to_numeric(cleaned, errors="coerce")
+
+    def _is_integer_like(self, series: pd.Series) -> bool:
+        return bool(((series % 1) == 0).all())
+
+    def _should_skip_numeric_inference(self, column: str) -> bool:
+        if column in {"target_date", "last_updated"}:
+            return True
+        if column.endswith("_id") or column.endswith("_ref"):
+            return True
+
+        string_tokens = (
+            "name",
+            "title",
+            "description",
+            "cause",
+            "owner",
+            "strategy",
+            "mitigation",
+            "status",
+            "level",
+            "remarks",
+            "package",
+            "category",
+            "snippet",
+            "source",
+        )
+        return any(token in column for token in string_tokens)
 
     def _sample_rows(self, dataframe: pd.DataFrame, limit: int = 3) -> list[dict[str, object]]:
         sample = dataframe.head(limit).copy()

@@ -1,7 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import Field, SecretStr
+from pydantic import Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -24,20 +24,32 @@ class Settings(BaseSettings):
     groq_api_key: SecretStr | None = None
     google_api_key: SecretStr | None = None
     gemini_api_key: SecretStr | None = None
-    router_provider: str
-    router_model: str
-    document_agent_provider: str
-    document_agent_model: str
-    data_agent_provider: str
-    data_agent_model: str
-    reporter_provider: str
-    reporter_model: str
-    agent_log_path: Path
-    agent_log_include_content: bool
-    llm_pricing_file: Path
-    langsmith_tracing: bool
+    router_provider: str = "groq"
+    router_model: str = "openai/gpt-oss-120b"
+    document_agent_provider: str = "groq"
+    document_agent_model: str = "openai/gpt-oss-120b"
+    data_agent_provider: str = "groq"
+    data_agent_model: str = "openai/gpt-oss-120b"
+    reporter_provider: str = "groq"
+    reporter_model: str = "openai/gpt-oss-20b"
+    agent_log_path: Path = Field(default=Path("storage/logs/agent_calls.jsonl"))
+    agent_log_include_content: bool = True
+    llm_pricing_file: Path = Field(default=Path("app/ai/llm_pricing.yaml"))
+    langsmith_tracing: bool = False
     langsmith_api_key: SecretStr | None = None
     langsmith_project: str | None = None
+
+    @field_validator("database_url", mode="before")
+    @classmethod
+    def normalize_database_url(cls, value: str) -> str:
+        normalized = str(value).strip()
+        if normalized.startswith("postgres://"):
+            return normalized.replace("postgres://", "postgresql+psycopg://", 1)
+        if normalized.startswith("postgresql://"):
+            return normalized.replace("postgresql://", "postgresql+psycopg://", 1)
+        if normalized.startswith("postgresql+psycopg2://"):
+            return normalized.replace("postgresql+psycopg2://", "postgresql+psycopg://", 1)
+        return normalized
 
 
 @lru_cache

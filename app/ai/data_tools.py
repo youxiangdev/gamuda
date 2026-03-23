@@ -260,6 +260,7 @@ class DataToolRuntime:
 
         if aggregations:
             agg_map: dict[str, tuple[str, str]] = {}
+            working = dataframe.copy()
             for item in aggregations:
                 column = str(item.get("column") or "").strip()
                 fn = str(item.get("fn") or "").strip().lower()
@@ -268,13 +269,23 @@ class DataToolRuntime:
                     raise ValueError(f"Unknown aggregation column: {column}")
                 if fn not in {"sum", "avg", "mean", "min", "max", "count"}:
                     raise ValueError(f"Unsupported aggregation fn: {fn}")
+                if fn != "count":
+                    parsed = pd.to_numeric(working[column], errors="coerce")
+                    parsed_non_null = parsed[working[column].notna()]
+                    if not parsed_non_null.empty and parsed_non_null.notna().all():
+                        if bool(((parsed_non_null % 1) == 0).all()):
+                            working[column] = parsed.round().astype("Int64")
+                        else:
+                            working[column] = parsed.astype("Float64")
+                    else:
+                        raise ValueError(f"Aggregation column is not numeric: {column}")
                 agg_map[alias or f"{fn}_{column}"] = (column, "mean" if fn == "avg" else fn)
 
             if group_by:
-                grouped = dataframe.groupby(group_by, dropna=False)
+                grouped = working.groupby(group_by, dropna=False)
                 frame = grouped.agg(**agg_map).reset_index()
             else:
-                frame = dataframe.agg(**agg_map).to_frame().T
+                frame = working.agg(**agg_map).to_frame().T
             return frame
 
         if select:

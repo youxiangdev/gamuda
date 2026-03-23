@@ -243,6 +243,21 @@ def _is_retryable_specialist_error(exc: Exception) -> bool:
     return any(marker in text for marker in markers)
 
 
+def _is_missing_required_tool_call_error(exc: Exception) -> bool:
+    return "Tool choice is required, but model did not call a tool" in str(exc)
+
+
+def _preferred_retry_tool(agent_name: str, allowed_tools: list[str]) -> str | None:
+    preferred_by_agent = {
+        "document_agent": "search_documents",
+        "data_agent": "list_datasets",
+    }
+    preferred = preferred_by_agent.get(agent_name)
+    if preferred in allowed_tools:
+        return preferred
+    return allowed_tools[0] if allowed_tools else None
+
+
 def _build_specialist_retry_message(*, error_text: str, allowed_tools: list[str]) -> HumanMessage:
     tool_names = ", ".join(allowed_tools)
     return HumanMessage(
@@ -254,6 +269,31 @@ def _build_specialist_retry_message(*, error_text: str, allowed_tools: list[str]
             "- If you already have enough evidence, return only the final JSON findings object.\n"
             "- Do not call any made-up tool such as `json`.\n"
             "- Do not include chain-of-thought, analysis, or explanatory prose outside the final JSON."
+        )
+    )
+
+
+def _build_required_tool_retry_message(
+    *,
+    error_text: str,
+    allowed_tools: list[str],
+    preferred_tool: str | None,
+) -> HumanMessage:
+    tool_names = ", ".join(allowed_tools)
+    preferred_line = ""
+    if preferred_tool:
+        preferred_line = f"- Call `{preferred_tool}` next. Do not skip the tool call.\n"
+    return HumanMessage(
+        content=(
+            "Your previous response was invalid for the provider API.\n"
+            f"Provider error: {error_text}\n\n"
+            "Retry and follow these rules exactly:\n"
+            "- You must call exactly one tool in your next response.\n"
+            f"- Call only one of these tools: {tool_names}\n"
+            f"{preferred_line}"
+            "- Do not return final JSON yet.\n"
+            "- Do not answer directly in plain text.\n"
+            "- Do not include chain-of-thought or explanatory prose.\n"
         )
     )
 
@@ -301,12 +341,22 @@ async def _run_bounded_specialist_agent(
         except Exception as exc:
             if _is_retryable_specialist_error(exc) and retry_attempts < MAX_SPECIALIST_RETRY_ATTEMPTS:
                 retry_attempts += 1
-                transcript.append(
-                    _build_specialist_retry_message(
-                        error_text=str(exc),
-                        allowed_tools=sorted(tools_by_name),
+                allowed_tools = sorted(tools_by_name)
+                if _is_missing_required_tool_call_error(exc):
+                    transcript.append(
+                        _build_required_tool_retry_message(
+                            error_text=str(exc),
+                            allowed_tools=allowed_tools,
+                            preferred_tool=_preferred_retry_tool(agent.name, allowed_tools),
+                        )
                     )
-                )
+                else:
+                    transcript.append(
+                        _build_specialist_retry_message(
+                            error_text=str(exc),
+                            allowed_tools=allowed_tools,
+                        )
+                    )
                 continue
 
             if _is_retryable_specialist_error(exc) and any(isinstance(message, ToolMessage) for message in transcript):
